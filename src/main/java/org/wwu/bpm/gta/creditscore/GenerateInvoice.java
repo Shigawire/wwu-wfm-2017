@@ -1,5 +1,10 @@
 package org.wwu.bpm.gta.creditscore;
 
-public class GenerateInvoice {
+//import org.camunda.bpm.application.ProcessApplication;
+import org.camunda.bpm.application.impl.ServletProcessApplication;
 
+//@ProcessApplication("Credit Score Calculation App")
+public class GenerateInvoice extends ServletProcessApplication {
+ 
 }
+

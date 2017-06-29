@@ -1,5 +1,11 @@
 package org.wwu.bpm.gta.creditscore;
 
-public class CheckOutstandingCredits {
+//import org.camunda.bpm.application.ProcessApplication;
+import org.camunda.bpm.application.impl.ServletProcessApplication;
 
+//@ProcessApplication("Credit Score Calculation App")
+public class CheckOutstandingCredits extends ServletProcessApplication {
+ 
 }
+
+

@@ -7,7 +7,7 @@
     <bpmn:messageFlow id="MessageFlow_0jngn1h" sourceRef="Participant_1xwihtv" targetRef="Receive_Payment" />
     <bpmn:messageFlow id="MessageFlow_0psux98" sourceRef="Participant_1xwihtv" targetRef="New_Credit_Check_Request" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_GTA_Agency" isExecutable="false">
+  <bpmn:process id="Process_GTA_Agency" isExecutable="true">
     <bpmn:laneSet>
       <bpmn:lane id="CreditCheckRequest" name="Credit Check Request">
         <bpmn:flowNodeRef>CheckRecord</bpmn:flowNodeRef>
@@ -42,7 +42,7 @@
         <bpmn:flowNodeRef>Receive_Payment</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:businessRuleTask id="CheckRecord" name="Check Record">
+    <bpmn:businessRuleTask id="CheckRecord" name="Check Record" camunda:decisionRef="CheckRecord">
       <bpmn:incoming>SequenceFlow_0s65lzw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1xkpj09</bpmn:outgoing>
     </bpmn:businessRuleTask>
@@ -57,16 +57,20 @@
     </bpmn:serviceTask>
     <bpmn:startEvent id="New_Credit_Check_Request" name="New Credit Check Request">
       <bpmn:outgoing>SequenceFlow_156mf3m</bpmn:outgoing>
-      <bpmn:messageEventDefinition />
+      <bpmn:messageEventDefinition messageRef="Message_1twm4h5" />
     </bpmn:startEvent>
     <bpmn:exclusiveGateway id="ExclusiveGateway_1rxx91v" name="Check if the Record is Older Than 3 Months" gatewayDirection="Diverging">
       <bpmn:incoming>SequenceFlow_1xkpj09</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1rgml18</bpmn:outgoing>
       <bpmn:outgoing>SequenceFlow_0u3kd44</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_0s65lzw" name="Yes" sourceRef="ExclusiveGateway_0s4ahik" targetRef="CheckRecord" />
+    <bpmn:sequenceFlow id="SequenceFlow_0s65lzw" name="Yes" sourceRef="ExclusiveGateway_0s4ahik" targetRef="CheckRecord">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1xkpj09" sourceRef="CheckRecord" targetRef="ExclusiveGateway_1rxx91v" />
-    <bpmn:sequenceFlow id="SequenceFlow_1ajber6" name="No" sourceRef="ExclusiveGateway_0s4ahik" targetRef="Create_a_New_Account" />
+    <bpmn:sequenceFlow id="SequenceFlow_1ajber6" name="No" sourceRef="ExclusiveGateway_0s4ahik" targetRef="Create_a_New_Account">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0v1n4fy" sourceRef="if_the_Applicant_Exist" targetRef="ExclusiveGateway_0s4ahik" />
     <bpmn:sequenceFlow id="SequenceFlow_156mf3m" sourceRef="New_Credit_Check_Request" targetRef="if_the_Applicant_Exist" />
     <bpmn:sequenceFlow id="SequenceFlow_0cblbk6" sourceRef="Start_Information_Collection" targetRef="ParallelGateway_0updnu7" />
@@ -80,9 +84,13 @@
     <bpmn:sequenceFlow id="SequenceFlow_0s08rgi" sourceRef="Check_other_international_obligations_and_investments" targetRef="ParallelGateway_1o13j6n" />
     <bpmn:sequenceFlow id="SequenceFlow_003jazy" sourceRef="ParallelGateway_1o13j6n" targetRef="Check_Error" />
     <bpmn:sequenceFlow id="SequenceFlow_1m7a3gf" sourceRef="Send_Recommendation" targetRef="Request_closed" />
-    <bpmn:sequenceFlow id="SequenceFlow_1oapsg8" name="Yes" sourceRef="ExclusiveGateway_1gf422h" targetRef="Generate_Credit_Record" />
+    <bpmn:sequenceFlow id="SequenceFlow_1oapsg8" name="Yes" sourceRef="ExclusiveGateway_1gf422h" targetRef="Generate_Credit_Record">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1mkeuat" sourceRef="Check_Error" targetRef="ExclusiveGateway_1gf422h" />
-    <bpmn:sequenceFlow id="SequenceFlow_0vh0avk" name="No" sourceRef="ExclusiveGateway_1gf422h" targetRef="Correct_the_error" />
+    <bpmn:sequenceFlow id="SequenceFlow_0vh0avk" name="No" sourceRef="ExclusiveGateway_1gf422h" targetRef="Correct_the_error">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+    </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Check_International_Debts" name="Check International Debts" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.CheckInternationalDebts">
       <bpmn:incoming>SequenceFlow_0bpriuq</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0p00ie2</bpmn:outgoing>
@@ -92,9 +100,6 @@
         <bpmn:outputSet name="DefaultOutputSet" />
       </bpmn:ioSpecification>
       <bpmn:property id="Property_0yp2sdb" name="__targetRef_placeholder" />
-      <bpmn:dataInputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataInputAssociation>
       <bpmn:dataInputAssociation id="DataInputAssociation_0x0la5e">
         <bpmn:sourceRef>Debt_Information</bpmn:sourceRef>
         <bpmn:targetRef>Property_0yp2sdb</bpmn:targetRef>
@@ -109,9 +114,6 @@
         <bpmn:outputSet name="DefaultOutputSet" />
       </bpmn:ioSpecification>
       <bpmn:property id="Property_0d6z2uw" name="__targetRef_placeholder" />
-      <bpmn:dataInputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataInputAssociation>
       <bpmn:dataInputAssociation id="DataInputAssociation_1k3brg9">
         <bpmn:sourceRef>Credit_History</bpmn:sourceRef>
         <bpmn:targetRef>Property_0d6z2uw</bpmn:targetRef>
@@ -135,7 +137,7 @@
       <bpmn:incoming>SequenceFlow_0s08rgi</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_003jazy</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:businessRuleTask id="Check_Error" name="Check Error" implementation="##WebService">
+    <bpmn:businessRuleTask id="Check_Error" name="Check Error" implementation="##WebService" camunda:decisionRef="CheckError">
       <bpmn:incoming>SequenceFlow_003jazy</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1mkeuat</bpmn:outgoing>
     </bpmn:businessRuleTask>
@@ -147,18 +149,14 @@
     <bpmn:serviceTask id="Generate_Credit_Record" name="Generate Credit Record" camunda:class="org.wwu.bpm.gta.creditscore.GenerateCreditRecord">
       <bpmn:incoming>SequenceFlow_1oapsg8</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1m4694z</bpmn:outgoing>
-      <bpmn:dataOutputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataOutputAssociation>
-      <bpmn:dataOutputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataOutputAssociation>
       <bpmn:dataOutputAssociation id="DataOutputAssociation_1k12gw0">
         <bpmn:targetRef>DataStoreReference_1qlemvf</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
     <bpmn:dataStoreReference id="DataStoreReference_1qlemvf" name="Credit information" />
-    <bpmn:sequenceFlow id="SequenceFlow_1rgml18" name="No" sourceRef="ExclusiveGateway_1rxx91v" targetRef="Send_Recommendation" />
+    <bpmn:sequenceFlow id="SequenceFlow_1rgml18" name="No" sourceRef="ExclusiveGateway_1rxx91v" targetRef="Send_Recommendation">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+    </bpmn:sequenceFlow>
     <bpmn:startEvent id="Create_Invoice" name="Create Invoice">
       <bpmn:outgoing>SequenceFlow_0s8pipg</bpmn:outgoing>
     </bpmn:startEvent>
@@ -170,7 +168,7 @@
       <bpmn:incoming>SequenceFlow_0mhlpod</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_14wgdo0</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Send_Invoice_to_GMNY_Bank" name="Send Invoice to GMNY Bank" implementation="##WebService">
+    <bpmn:sendTask id="Send_Invoice_to_GMNY_Bank" name="Send Invoice to GMNY Bank" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.SendInvoice">
       <bpmn:incoming>SequenceFlow_14wgdo0</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0pyu3nu</bpmn:outgoing>
     </bpmn:sendTask>
@@ -183,7 +181,7 @@
     <bpmn:intermediateCatchEvent id="Receive_Payment" name="Receive Payment">
       <bpmn:incoming>SequenceFlow_0pyu3nu</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_134t0wx</bpmn:outgoing>
-      <bpmn:messageEventDefinition />
+      <bpmn:messageEventDefinition messageRef="Message_1ouhe9w" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="SequenceFlow_134t0wx" sourceRef="Receive_Payment" targetRef="Invoice_settled" />
     <bpmn:sequenceFlow id="SequenceFlow_0pyu3nu" sourceRef="Send_Invoice_to_GMNY_Bank" targetRef="Receive_Payment" />
@@ -198,9 +196,6 @@
         <bpmn:outputSet name="DefaultOutputSet" />
       </bpmn:ioSpecification>
       <bpmn:property id="Property_0rbapso" name="__targetRef_placeholder" />
-      <bpmn:dataInputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataInputAssociation>
       <bpmn:dataInputAssociation id="DataInputAssociation_02otl8l">
         <bpmn:sourceRef>Investment_Information</bpmn:sourceRef>
         <bpmn:targetRef>Property_0rbapso</bpmn:targetRef>
@@ -228,9 +223,6 @@
         <bpmn:outputSet name="DefaultOutputSet" />
       </bpmn:ioSpecification>
       <bpmn:property id="Property_063woab" name="__targetRef_placeholder" />
-      <bpmn:dataInputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataInputAssociation>
       <bpmn:dataInputAssociation id="DataInputAssociation_1r6wv0e">
         <bpmn:sourceRef>Payroll_Data</bpmn:sourceRef>
         <bpmn:targetRef>Property_063woab</bpmn:targetRef>
@@ -241,7 +233,7 @@
     <bpmn:endEvent id="Request_closed" name="Request closed">
       <bpmn:incoming>SequenceFlow_1m7a3gf</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sendTask id="Send_Recommendation" name="&#10;Send Credit History, Rating and Recommendation" implementation="##WebService">
+    <bpmn:sendTask id="Send_Recommendation" name="&#10;Send Credit History, Rating and Recommendation" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.SendCreditScoreReport">
       <bpmn:incoming>SequenceFlow_1rgml18</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1mta7s0</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1m7a3gf</bpmn:outgoing>
@@ -255,9 +247,6 @@
         <bpmn:inputSet name="DefaultInputSet" />
         <bpmn:outputSet name="DefaultOutputSet" />
       </bpmn:ioSpecification>
-      <bpmn:dataOutputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataOutputAssociation>
       <bpmn:dataOutputAssociation id="DataOutputAssociation_04vksv5">
         <bpmn:targetRef>DataObjectReference_0abduxe</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
@@ -271,16 +260,10 @@
         <bpmn:outputSet name="DefaultOutputSet" />
       </bpmn:ioSpecification>
       <bpmn:property id="Property_1oyy7td" name="__targetRef_placeholder" />
-      <bpmn:dataInputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataInputAssociation>
       <bpmn:dataInputAssociation id="DataInputAssociation_1pp9gr5">
         <bpmn:sourceRef>DataStoreReference_1qlemvf</bpmn:sourceRef>
         <bpmn:targetRef>Property_1oyy7td</bpmn:targetRef>
       </bpmn:dataInputAssociation>
-      <bpmn:dataOutputAssociation>
-        <bpmn:extensionElements />
-      </bpmn:dataOutputAssociation>
       <bpmn:dataOutputAssociation id="DataOutputAssociation_1si54fu">
         <bpmn:targetRef>DataObjectReference_0bor3g7</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
@@ -297,7 +280,9 @@
       <bpmn:incoming>SequenceFlow_0i4i64g</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_07sgky4</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_0u3kd44" name="Yes" sourceRef="ExclusiveGateway_1rxx91v" targetRef="ExclusiveGateway_0hlduoj" />
+    <bpmn:sequenceFlow id="SequenceFlow_0u3kd44" name="Yes" sourceRef="ExclusiveGateway_1rxx91v" targetRef="ExclusiveGateway_0hlduoj">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0i4i64g" sourceRef="Correct_the_error" targetRef="ExclusiveGateway_0hlduoj" />
     <bpmn:sequenceFlow id="SequenceFlow_07sgky4" sourceRef="ExclusiveGateway_0hlduoj" targetRef="Start_Information_Collection" />
     <bpmn:association id="Association_1e5yeyr" sourceRef="Check_Error" targetRef="Monitoring_System" />
@@ -305,6 +290,8 @@
 </bpmn:textAnnotation>
   </bpmn:process>
   <bpmn:process id="Process_174lh9l" isExecutable="false" />
+  <bpmn:message id="Message_1twm4h5" name="Message_CreditCheckRequest" />
+  <bpmn:message id="Message_1ouhe9w" name="Message_ReceivePayment" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1mtmvdw">
       <bpmndi:BPMNShape id="Participant_0ngpvtd_di" bpmnElement="GTA_Agency">
