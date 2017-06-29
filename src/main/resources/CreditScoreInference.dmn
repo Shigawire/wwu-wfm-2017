@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_00lfvte" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+  <decision id="CreditScoreInference" name="CreditScoreInference">
+    <decisionTable id="decisionTable">
+      <input id="input1" label="Customer" camunda:inputVariable="">
+        <inputExpression id="inputExpression1" typeRef="string">        <text></text>
+</inputExpression>
+      </input>
+      <input id="InputClause_0zfk06z" label="CreditScore">
+        <inputExpression id="LiteralExpression_0hml7yh" typeRef="string" />
+      </input>
+      <output id="output1" label="ScoreLevel" name="" typeRef="string" />
+      <rule id="row-926427521-5">
+        <description>Trustable</description>
+        <inputEntry id="UnaryTests_1p98tzy">        <text>GMNY Bank</text>
+</inputEntry>
+        <inputEntry id="UnaryTests_170g8qw">        <text><![CDATA[>=80]]></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_057fc74">        <text>Good</text>
+</outputEntry>
+      </rule>
+      <rule id="row-926427521-6">
+        <description>Should be careful</description>
+        <inputEntry id="UnaryTests_0bmdged">        <text>GMNY Bank</text>
+</inputEntry>
+        <inputEntry id="UnaryTests_0m0kptd">        <text><![CDATA[<80, >=60]]></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_13bdged">        <text>Fair</text>
+</outputEntry>
+      </rule>
+      <rule id="row-926427521-7">
+        <description>Untrausted</description>
+        <inputEntry id="UnaryTests_1bawwjm">        <text>GMNY Bank</text>
+</inputEntry>
+        <inputEntry id="UnaryTests_0fbegyp">        <text><![CDATA[<60]]></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_0u48n9q">        <text>Poor</text>
+</outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+</definitions>
