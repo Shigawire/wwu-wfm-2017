@@ -3,14 +3,17 @@
   <decision id="CheckRecord" name="CheckRecord">
     <decisionTable id="decisionTable">
       <input id="InputClause_085n4yf" label="DurationDay" camunda:inputVariable="durationDay">
-        <inputExpression id="LiteralExpression_0ykev4o" typeRef="integer">        <text><![CDATA[<=90, >90, <=180, >180]]></text>
+        <inputExpression id="LiteralExpression_0ykev4o" typeRef="integer">        <text>durationDay</text>
 </inputExpression>
       </input>
       <input id="InputClause_04whaq9" label="CreditScore" camunda:inputVariable="creditScore">
-        <inputExpression id="LiteralExpression_03fxxbn" typeRef="integer">        <text><![CDATA[>=80, <80]]></text>
+        <inputExpression id="LiteralExpression_03fxxbn" typeRef="integer">        <text>creditScore</text>
 </inputExpression>
       </input>
-      <output id="output1" label="Investigation Necessary?" name="yes, no" typeRef="boolean" />
+      <output id="output1" label="Investigation Necessary?" name="InvestigationNecessity" typeRef="string">
+        <outputValues id="UnaryTests_1b4wmuo">        <text><![CDATA["yes","no"]]></text>
+</outputValues>
+      </output>
       <rule id="row-926427521-1">
         <description></description>
         <inputEntry id="UnaryTests_00j6lm9">        <text><![CDATA[<=90]]></text>
