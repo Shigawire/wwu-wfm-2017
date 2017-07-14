@@ -2,11 +2,10 @@ package org.wwu.bpm.gta.creditscore;
 
 import java.util.logging.Logger;
 
-import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 
-public class CalculateInvestigationVolume extends ServletProcessApplication  implements JavaDelegate {
+public class CalculateInvestigationVolume implements JavaDelegate {
 
 	private final static Logger LOGGER = Logger.getLogger("GTA");
 	
@@ -15,5 +14,5 @@ public class CalculateInvestigationVolume extends ServletProcessApplication  imp
 		int investigationVolume = (int)(Math.random() * 1000);	
 		execution.setVariable("investigationVolume", investigationVolume);
 	}
- 
+
 }

@@ -12,71 +12,67 @@ import java.sql.SQLException;
 //@ProcessApplication("Credit Score Calculation App")
 public class CheckApplicantExists extends ServletProcessApplication implements JavaDelegate {
 
-	@Override
-	public void execute(DelegateExecution arg0) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 	//if the applicant exists, get ID, date of last checking, score of last checking. 
 	//need to calculate the duration between last check and current date then. 
 	//duration is better to be named as "durationDay". (Because it's used in decision table)
 	
-	
-		public static void main (String[] args) {
-			String firstname = "";
-			String lastname = "";
-			String birthDate = "";
-			
+	@Override
+	public void execute(DelegateExecution execution) throws Exception {
+		// TODO Auto-generated method stub
+		
+		String firstName = (String) execution.getVariable("firstName");
+		String lastName = (String) execution.getVariable("lastName");
+		String passportNumber = (String) execution.getVariable("passportNumber");
+		
+		Object applicant = getApplicant(firstName, lastName, passportNumber);
+		
+		execution.setVariable("applicantExists", "true");
+		execution.setVariable("applicant", "none");
+	}
+		
+		public static Object getApplicant(String firstname, String lastname, String passportNumber) {
 			
 			Connection con = connectDatabase();
-			boolean exists = checkApplicant (con, firstname, lastname, birthDate);
-			
-			if (exists) {
-				// trigger check record
-			} else {
-				// trigger create new account calling a web form to insert applicant data
-			}
-			
-		}
-		
-		public static Connection connectDatabase () {
-			String url = ""; //enter database url
-			String username = ""; //enter database username
-			String password = ""; //enter database password
-			
-			System.out.println("Connection database...");
-			
-			try (Connection connection = DriverManager.getConnection(url, username, password)){
-					System.out.println("Database Connected!");
-					return connection;
-			} catch (SQLException e) {
-				throw new IllegalStateException ("Connot connect to database!", e);
-			}
-			
-		}
-
-		public static boolean checkApplicant(Connection con, String firstname, String lastname, String birthDate) {
-			boolean exists = false;
 			PreparedStatement ps;
 			ResultSet rs;
+			Object applicant = new Object();
 			
 			try {
-				ps = con.prepareStatement("SELECT EXISTS(Select * FROM customer WHERE firstname = ? AND lastname = ? AND birthdate = ?" );
+				ps = con.prepareStatement("SELECT * FROM applicants WHERE firstName = ? AND lastName = ? AND passportNumber = ?" );
 				ps.setObject(0, firstname);
 				ps.setObject(1, lastname);
-				ps.setObject(2, birthDate);
+				ps.setObject(2, passportNumber);
 				rs = ps.executeQuery();
-				if (rs == null) 
-					exists = true;
-				else exists = false;
+				System.out.println(rs);
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return exists;
-			
-			
+			return applicant;
 		}
+		
+		private static Connection connectDatabase () {
+			String url = "jdbc:mysql://62.210.90.98:3306/gta_agency";
+			String username = "root"; 
+			String password = "password";
+			
+			System.out.println("Connection database...");
+			
+			Connection connection = null;
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				connection = DriverManager.getConnection(url, username, password);
+				
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return connection;
+		}
+
 }
