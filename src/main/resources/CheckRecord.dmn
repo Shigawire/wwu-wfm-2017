@@ -1,51 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_0pjdw6x" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
+<definitions xmlns="http://www.omg.org/spec/DMN/20151101/dmn.xsd" xmlns:camunda="http://camunda.org/schema/1.0/dmn" id="definitions_0acirsc" name="definitions" namespace="http://camunda.org/schema/1.0/dmn">
   <decision id="CheckRecord" name="CheckRecord">
     <decisionTable id="decisionTable">
-      <input id="InputClause_085n4yf" label="DurationDay" camunda:inputVariable="durationDay">
-        <inputExpression id="LiteralExpression_0ykev4o" typeRef="integer">        <text>durationDay</text>
+      <input id="input1" label="durationDay" camunda:inputVariable="durationDay">
+        <inputExpression id="inputExpression1" typeRef="integer">        <text>durationDay</text>
 </inputExpression>
       </input>
-      <input id="InputClause_04whaq9" label="CreditScore" camunda:inputVariable="creditScore">
-        <inputExpression id="LiteralExpression_03fxxbn" typeRef="integer">        <text>creditScore</text>
+      <input id="InputClause_0y1ho5s" label="creditScore" camunda:inputVariable="creditScore">
+        <inputExpression id="LiteralExpression_0cn2fc3" typeRef="integer">        <text>creditScore</text>
 </inputExpression>
       </input>
-      <output id="output1" label="Investigation Necessary?" name="InvestigationNecessity" typeRef="string">
-        <outputValues id="UnaryTests_1b4wmuo">        <text><![CDATA["yes","no"]]></text>
-</outputValues>
-      </output>
-      <rule id="row-926427521-1">
+      <output id="output1" label="investigationNecessity" name="investigationNecessity" typeRef="integer" />
+      <rule id="row-226070233-1">
+        <description>0 means not necessary to investigate again, could directly send the prior report.</description>
+        <inputEntry id="UnaryTests_12018qb">        <text><![CDATA[<= 90]]></text>
+</inputEntry>
+        <inputEntry id="UnaryTests_1y3ipf2">        <text></text>
+</inputEntry>
+        <outputEntry id="LiteralExpression_0h6v4yj">        <text>0</text>
+</outputEntry>
+      </rule>
+      <rule id="row-226070233-2">
         <description></description>
-        <inputEntry id="UnaryTests_00j6lm9">        <text><![CDATA[<=90]]></text>
+        <inputEntry id="UnaryTests_1djdj5t">        <text><![CDATA[> 90, <= 180]]></text>
 </inputEntry>
-        <inputEntry id="UnaryTests_0i9wbg7">        <text></text>
+        <inputEntry id="UnaryTests_19qjo5v">        <text><![CDATA[>= 8]]></text>
 </inputEntry>
-        <outputEntry id="LiteralExpression_1np49lv">        <text>no</text>
+        <outputEntry id="LiteralExpression_0v7y1us">        <text>0</text>
 </outputEntry>
       </rule>
-      <rule id="row-926427521-2">
-        <description>if the last check is in half year and has good score, then investigation is not necessary.</description>
-        <inputEntry id="UnaryTests_0s6rrhm">        <text><![CDATA[>90, <=180]]></text>
+      <rule id="row-226070233-3">
+        <description>1 means the prior report is not valid any more, should investigate and generate new report. </description>
+        <inputEntry id="UnaryTests_14a5upy">        <text><![CDATA[> 90, <= 180]]></text>
 </inputEntry>
-        <inputEntry id="UnaryTests_1f8efj7">        <text><![CDATA[>=80]]></text>
+        <inputEntry id="UnaryTests_1hwdyrq">        <text><![CDATA[< 8]]></text>
 </inputEntry>
-        <outputEntry id="LiteralExpression_1wmmuv4">        <text>no</text>
+        <outputEntry id="LiteralExpression_1lwcj8c">        <text>1</text>
 </outputEntry>
       </rule>
-      <rule id="row-926427521-3">
-        <inputEntry id="UnaryTests_0n6omvi">        <text><![CDATA[>90, <=180]]></text>
+      <rule id="row-226070233-4">
+        <description></description>
+        <inputEntry id="UnaryTests_1fs3552">        <text><![CDATA[> 180]]></text>
 </inputEntry>
-        <inputEntry id="UnaryTests_0j6b66g">        <text><![CDATA[<80]]></text>
+        <inputEntry id="UnaryTests_184wnnx">        <text></text>
 </inputEntry>
-        <outputEntry id="LiteralExpression_023y95p">        <text>yes</text>
-</outputEntry>
-      </rule>
-      <rule id="row-926427521-4">
-        <inputEntry id="UnaryTests_1unyo4b">        <text><![CDATA[>180]]></text>
-</inputEntry>
-        <inputEntry id="UnaryTests_0tiuvam">        <text></text>
-</inputEntry>
-        <outputEntry id="LiteralExpression_1s03nbf">        <text>yes</text>
+        <outputEntry id="LiteralExpression_1py9dkw">        <text>1</text>
 </outputEntry>
       </rule>
     </decisionTable>
