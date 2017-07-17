@@ -8,8 +8,9 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 @ProcessApplication("Credit Score Calculation App")
 public class CreditScoreCalculationApplication extends ServletProcessApplication implements JavaDelegate {
 
+	int creditScore; 
 	@Override
-	public void execute(DelegateExecution arg0) throws Exception {
+	public void execute(DelegateExecution execution) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
