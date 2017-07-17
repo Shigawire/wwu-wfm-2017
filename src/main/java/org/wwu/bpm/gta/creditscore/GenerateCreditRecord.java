@@ -33,8 +33,13 @@ public class GenerateCreditRecord extends ServletProcessApplication  implements 
 		
 		// need to create a timestamp SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-		ps = con.prepareStatement("INSERT INTO 'applicants'('firstName','lastName', 'passportNumber', 'creditRating', 'lastRating' )"
-												 + " VALUES('"+execution.getVariable("firstName")+"'"+execution.getVariable("lastName")+"'"+execution.getVariable("passportNumber")+"'"+execution.getVariable("CreditScore")+"'2017-04-12 11:11:11'");
+		ps = con.prepareStatement("INSERT INTO 'applicants'('firstName','lastName', 'passportNumber', 'creditRating', 'lastRating')"
+												 + " VALUES('?','?','?','?','2017-04-12 11:11:11'");
+		ps.setObject(0, execution.getVariable("firstName"));
+		ps.setObject(1, execution.getVariable("lastName"));
+		ps.setObject(2, execution.getVariable("passportNumber"));
+		ps.setObject(3, execution.getVariable("CreditScore"));
+		//ps.setObject(4, execution.getVariable("TIMESTAMPPPPPPPP")); 
 		ps.executeQuery();
 		con.close();
 	}
