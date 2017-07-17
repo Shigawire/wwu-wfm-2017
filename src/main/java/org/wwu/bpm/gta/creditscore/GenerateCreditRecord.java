@@ -1,8 +1,16 @@
 package org.wwu.bpm.gta.creditscore;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+
 import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.runtime.Execution;
 
 public class GenerateCreditRecord extends ServletProcessApplication  implements JavaDelegate {
 
@@ -18,6 +26,41 @@ public class GenerateCreditRecord extends ServletProcessApplication  implements 
 					+ (int) execution.getVariable("PayrollScore"))/4;
 		
 		execution.setVariable("CreditScore", CreditScore); 
+	}
+	public void createEntry(DelegateExecution execution) throws Exception{
+		Connection con = connectDatabase();
+		PreparedStatement ps;
+		
+		// need to create a timestamp SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
+		ps = con.prepareStatement("INSERT INTO 'applicants'('firstName','lastName', 'passportNumber', 'creditRating', 'lastRating' )"
+												 + " VALUES('"+execution.getVariable("firstName")+"'"+execution.getVariable("lastName")+"'"+execution.getVariable("passportNumber")+"'"+execution.getVariable("CreditScore")+"'2017-04-12 11:11:11'");
+		ps.executeQuery();
+		con.close();
+	}
+	
+	
+	private static Connection connectDatabase () {
+		String url = "jdbc:mysql://62.210.90.98:3306/gta_agency";
+		String username = "root"; 
+		String password = "password";
+		
+		System.out.println("Connection database...");
+		
+		Connection connection = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connection = DriverManager.getConnection(url, username, password);
+			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return connection;
 	}
  
 }
