@@ -7,9 +7,11 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 public class CheckOtherInternationalObligationsAndInvestments extends ServletProcessApplication  implements JavaDelegate {
 
 	@Override
-	public void execute(DelegateExecution arg0) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void execute(DelegateExecution execution) throws Exception {
+		// generates random variable for international Obligations and Investments in value range from 0 to 10
+				int InternationalObligationScore = (int)(Math.random() * 10);	
+				execution.setVariable("InternationalObligationScore", InternationalObligationScore);
+				
 	}
- 
+  
 }

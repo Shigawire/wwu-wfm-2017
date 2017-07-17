@@ -7,8 +7,10 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 public class CheckOutstandingCredits extends ServletProcessApplication implements JavaDelegate {
 
 	@Override
-	public void execute(DelegateExecution arg0) throws Exception {
-		// TODO Auto-generated method stub
+	public void execute(DelegateExecution execution) throws Exception {
+		// generates random variable in value range from 0 to 10 that represents an applicants outstanding dept situation
+				int OutstandingDebtScore = (int)(Math.random() * 10);	
+				execution.setVariable("OutstandingDebtScore", OutstandingDebtScore);
 		
 	}
  
