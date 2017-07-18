@@ -24,6 +24,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	public double investmentInformation;
 	public boolean recommendation;
 	public double outstandingCredits;
+	public String date;
 	public Connection con;
 
 	@Override
@@ -41,7 +42,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	}
 
 	/*
-	 *  Get Methods(non-Javadoc)
+	 * Get Methods(non-Javadoc)
+	 * 
 	 * @see org.camunda.bpm.application.AbstractProcessApplication#getName()
 	 */
 
@@ -50,22 +52,37 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			Connection con = connectDatabase();
 			PreparedStatement ps;
 			ResultSet rs;
-			
+
 			try {
-				ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passport = ?)");
+				ps = con.prepareStatement("SELECT firstName FROM gta_agency.applicants WHERE passport = ?)");
 				ps.setObject(0, passport);
 				rs = ps.executeQuery();
-				
+				name = rs.getString(1);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return name;
 	}
 
 	public String getLastname() {
-		return lastname;
+		if (lastname == "") {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+
+			try {
+				ps = con.prepareStatement("SELECT lastName FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				lastname = rs.getString(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return name;
 	}
 
 	public String getPassport() {
@@ -73,31 +90,144 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	}
 
 	public double getPayrollData() {
+		if (payrollData == 0) {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+
+			try {
+				ps = con.prepareStatement("SELECT payrollData FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				payrollData = rs.getDouble(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return payrollData;
 	}
 
 	public double getCreditScore() {
+		if (creditScore == 0) {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+
+			try {
+				ps = con.prepareStatement("SELECT creditRating FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				creditScore = rs.getDouble(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return creditScore;
 	}
 
 	public double getDebtInformation() {
+		if (debtInformation == 0) {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+
+			try {
+				ps = con.prepareStatement("SELECT deptInformation FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				debtInformation = rs.getDouble(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return debtInformation;
 	}
 
 	public double getInvestmentInformation() {
+		if (investmentInformation == 0) {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+
+			try {
+				ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				investmentInformation = rs.getDouble(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return investmentInformation;
 	}
 
 	public boolean getRecommendation() {
+		Connection con = connectDatabase();
+		PreparedStatement ps;
+		ResultSet rs;
+		int rec = 0;
+
+		try {
+			ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passport = ?)");
+			ps.setObject(0, passport);
+			rs = ps.executeQuery();
+			rec = rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		if (rec == 1)
+			recommendation = true;
+
+		else
+			recommendation = false;
+
 		return recommendation;
 	}
 
 	public double getOutstandingCredits() {
+		if (outstandingCredits == 0) {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+
+			try {
+				ps = con.prepareStatement("SELECT outstandingCredits FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				outstandingCredits = rs.getDouble(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 		return outstandingCredits;
 	}
-	
+
+	public String getDate() {
+		if (date == "") {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+
+			try {
+				ps = con.prepareStatement("SELECT lastRating FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				date = rs.getString(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return date;
+	}
 	/*
-	 *  Set Methods
+	 * Set Methods
 	 */
 
 	public void setName(String appName) {
@@ -159,7 +289,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		PreparedStatement ps;
 
 		Date today = new Date();
-		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-YYYY");
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("YYYY-MM-DD");
 		String date = DATE_FORMAT.format(today);
 
 		try {
@@ -213,12 +343,13 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ps = con.prepareStatement("UPDATE gta_agency.applicants SET recommendation = ? WHERE passportNumber = ?)");
 			ps.setObject(0, recValue);
 			ps.setObject(1, passport);
-			
-			
-			// if Recommended to give credit the recommendation value is set to 1 otherwise it remains 0
+
+			// if Recommended to give credit the recommendation value is set to 1 otherwise
+			// it remains 0
 			if (appRecommendation)
 				recValue = 1;
-			else recValue = 0;
+			else
+				recValue = 0;
 
 			ps.executeQuery();
 		} catch (SQLException e) {
@@ -227,13 +358,14 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 
 	}
 
-	public void setOutstandingCredits (double appOutstandingCredits) {
+	public void setOutstandingCredits(double appOutstandingCredits) {
 		outstandingCredits = appOutstandingCredits;
 		Connection con = connectDatabase();
 		PreparedStatement ps;
-		
+
 		try {
-			ps = con.prepareStatement("UPDATE gta_agency.applicants SET outstandingCredits = ? WHERE passportNumber = ?)");
+			ps = con.prepareStatement(
+					"UPDATE gta_agency.applicants SET outstandingCredits = ? WHERE passportNumber = ?)");
 			ps.setObject(0, outstandingCredits);
 			ps.setObject(1, passport);
 			ps.executeQuery();
