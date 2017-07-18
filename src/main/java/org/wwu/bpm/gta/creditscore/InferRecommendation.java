@@ -13,7 +13,7 @@ public class InferRecommendation extends ServletProcessApplication  implements J
 		Applicant app;
 		app = (Applicant) execution.getVariable("Applicant");
 		boolean creditRecommendation = false; 
-		double creditScore = app.getCreditScore("CreditScore");
+		double creditScore = app.getCreditScore();
 		
 		//if the creditScore is equal to or higher than 0.8 the recommendation is true
 		
@@ -22,7 +22,7 @@ public class InferRecommendation extends ServletProcessApplication  implements J
 	}else{
 		creditRecommendation = false; 
 		}
-	app.setCreditRecommendation("creditRecommendation", creditRecommendation);
+	app.setRecommendation(creditRecommendation);
 	}
  
 }
