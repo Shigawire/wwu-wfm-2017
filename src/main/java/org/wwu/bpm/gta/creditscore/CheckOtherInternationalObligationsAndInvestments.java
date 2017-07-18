@@ -8,9 +8,9 @@ public class CheckOtherInternationalObligationsAndInvestments extends ServletPro
 
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		// generates random variable for international Obligations and Investments in value range from 0 to 10
-				double InternationalObligationScore = (double)(Math.random() * 1);	
-				execution.setVariable("InternationalObligationScore", InternationalObligationScore);
+		// generates random variable for international Obligations and Investments in value range from 0 to 1
+			double InternationalObligationScore = (double)(Math.random() * 1);	
+			execution.setVariable("InternationalObligationScore", InternationalObligationScore);
 				
 	}
   
