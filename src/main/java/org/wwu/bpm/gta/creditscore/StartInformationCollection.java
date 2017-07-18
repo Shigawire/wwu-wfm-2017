@@ -9,12 +9,7 @@ public class StartInformationCollection extends ServletProcessApplication  imple
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		// TODO Auto-generated method stub
-		
-		execution.getVariable("InternationalObligationScore");
-		execution.getVariable("InternationalDebtScore");
-		execution.getVariable("OutstandingDebtScore");
-		execution.getVariable("PayrollScore");
-		
+
 	}
  
 }

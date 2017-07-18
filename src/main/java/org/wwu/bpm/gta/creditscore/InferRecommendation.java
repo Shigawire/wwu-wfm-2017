@@ -12,7 +12,7 @@ public class InferRecommendation extends ServletProcessApplication  implements J
 		//boolean recommendation is set false in default
 		
 		boolean creditRecommendation = false; 
-		int creditScore = (int) execution.getVariable("CreditScore");
+		double creditScore = (double) execution.getVariable("CreditScore");
 		
 		//if the creditScore is equal to or higher than 0.8 the recommendation is true
 		
