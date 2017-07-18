@@ -7,8 +7,13 @@ import org.camunda.bpm.engine.delegate.JavaDelegate;
 public class StartInformationCollection extends ServletProcessApplication  implements JavaDelegate {
 
 	@Override
-	public void execute(DelegateExecution arg0) throws Exception {
+	public void execute(DelegateExecution execution) throws Exception {
 		// TODO Auto-generated method stub
+		
+		execution.getVariable("InternationalObligationScore");
+		execution.getVariable("InternationalDebtScore");
+		execution.getVariable("OutstandingDebtScore");
+		execution.getVariable("PayrollScore");
 		
 	}
  
