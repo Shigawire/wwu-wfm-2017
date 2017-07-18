@@ -23,7 +23,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	public double debtInformation;
 	public double investmentInformation;
 	public boolean recommendation;
-	public boolean outstandingCredits;
+	public double outstandingCredits;
 	public Connection con;
 
 	@Override
@@ -43,6 +43,21 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	// Get Methods
 
 	public String getName() {
+		if (name == "") {
+			Connection con = connectDatabase();
+			PreparedStatement ps;
+			ResultSet rs;
+			
+			try {
+				ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passport = ?)");
+				ps.setObject(0, passport);
+				rs = ps.executeQuery();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return name;
 	}
 
@@ -74,6 +89,9 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		return recommendation;
 	}
 
+	public double getOutstandingCredits() {
+		return outstandingCredits;
+	}
 	// Set Methods
 
 	public void setName(String appName) {
@@ -201,6 +219,10 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			e.printStackTrace();
 		}
 
+	}
+
+	public void setOutstandingCredits (double appOutstandingCredits) {
+		
 	}
 	// enable connection to the database
 
