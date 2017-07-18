@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -21,6 +23,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	public double debtInformation;
 	public double investmentInformation;
 	public boolean recommendation;
+	public boolean outstandingCredits;
 	public Connection con;
 
 	@Override
@@ -34,12 +37,12 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		name = appName;
 		lastname = appLastname;
 		passport = appPassport;
-		
+
 	}
 
 	// Get Methods
 
- 	public String getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -66,7 +69,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	public double getInvestmentInformation() {
 		return investmentInformation;
 	}
-	
+
 	public boolean getRecommendation() {
 		return recommendation;
 	}
@@ -77,7 +80,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		name = appName;
 		Connection con = connectDatabase();
 		PreparedStatement ps;
-		
+
 		try {
 			ps = con.prepareStatement("UPDATE applicants SET firstname = ? WHERE passportNumber = ?)");
 			ps.setObject(0, name);
@@ -99,7 +102,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		lastname = appLastname;
 		Connection con = connectDatabase();
 		PreparedStatement ps;
-		
+
 		try {
 			ps = con.prepareStatement("UPDATE applicants SET lastname = ? WHERE passportNumber = ?)");
 			ps.setObject(0, lastname);
@@ -115,7 +118,7 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		payrollData = appPayrollData;
 		Connection con = connectDatabase();
 		PreparedStatement ps;
-		
+
 		try {
 			ps = con.prepareStatement("UPDATE gta_agency.applicants SET payrollData = ? WHERE passportNumber = ?)");
 			ps.setObject(0, payrollData);
@@ -126,38 +129,81 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		}
 	}
 
-	public void setCreditHistory(double appCreditScore) {
+	public void setCreditScore(double appCreditScore) {
 		creditScore = appCreditScore;
 		Connection con = connectDatabase();
 		PreparedStatement ps;
-		
-		// get actual Time Stamp
-		// 1) create a java calendar instance
-		Calendar calendar = Calendar.getInstance();
 
-		// 2) get a java.util.Date from the calendar instance.
-//		    this date will represent the current instant, or "now".
-		java.util.Date now = calendar.getTime();
+		Date today = new Date();
+		SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM-dd-YYYY");
+		String date = DATE_FORMAT.format(today);
 
-		// 3) a java current time (now) instance
-		java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime())
-		
 		try {
-			ps = con.prepareStatement("UPDATE gta_agency.applicants SET creditRating = ?, lastRating = ? WHERE passportNumber = ?)");
+			ps = con.prepareStatement(
+					"UPDATE gta_agency.applicants SET creditRating = ?, lastRating = ? WHERE passportNumber = ?)");
 			ps.setObject(0, creditScore);
+			ps.setObject(1, date);
+			ps.setObject(2, passport);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 
-	public void setDebtInformation() {
+	public void setDebtInformation(double appDebtInformation) {
+		debtInformation = appDebtInformation;
+		Connection con = connectDatabase();
+		PreparedStatement ps;
 
+		try {
+			ps = con.prepareStatement("UPDATE gta_agency.applicants SET debtInformation = ? WHERE passwordNumber = ?)");
+			ps.setObject(0, debtInformation);
+			ps.setObject(1, passport);
+			ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void setInvestmentInformation() {
+	public void setInvestmentInformation(double appInvestmentInformation) {
+		investmentInformation = appInvestmentInformation;
+		Connection con = connectDatabase();
+		PreparedStatement ps;
 
+		try {
+			ps = con.prepareStatement(
+					"UPDATE gta_agency.applicants SET investmentInformation = ? WHERE passportNumber = ?)");
+			ps.setObject(0, investmentInformation);
+			ps.setObject(1, passport);
+			ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	//enable connection to the database
-	
+	public void setRecommendation(boolean appRecommendation) {
+		int recValue = 0;
+		Connection con = connectDatabase();
+		PreparedStatement ps;
+
+		try {
+			ps = con.prepareStatement("UPDATE gta_agency.applicants SET recommendation = ? WHERE passportNumber = ?)");
+			ps.setObject(0, recValue);
+			ps.setObject(1, passport);
+			
+			
+			// if Recommended to give credit the recommendation value is set to 1 otherwise it remains 0
+			if (appRecommendation)
+				recValue = 1;
+			else recValue = 0;
+
+			ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+	// enable connection to the database
+
 	private static Connection connectDatabase() {
 		String url = "jdbc:mysql://62.210.90.98:3306/gta_agency";
 		String username = "root";
