@@ -9,7 +9,7 @@ public class CheckInternationalDebts extends ServletProcessApplication  implemen
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		// generates random variable InternationalDebtScore in value range from 0 to 10
-		int InternationalDebtScore = (int)(Math.random() * 10);	
+		int InternationalDebtScore = (int)(Math.random() * 1);	
 		execution.setVariable("InternationalDebtScore", InternationalDebtScore);
 		
 	}
