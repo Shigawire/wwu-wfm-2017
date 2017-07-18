@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -15,10 +16,12 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	public String name;
 	public String lastname;
 	public String passport;
-	public String[][] payrollData;
-	public String[][] creditHistory;
-	public String[][] debtInformation;
-	public String[][] investmentInformation;
+	public double payrollData;
+	public double creditScore;
+	public double debtInformation;
+	public double investmentInformation;
+	public boolean recommendation;
+	public Connection con;
 
 	@Override
 	public void execute(DelegateExecution arg0) throws Exception {
@@ -31,11 +34,12 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		name = appName;
 		lastname = appLastname;
 		passport = appPassport;
+		
 	}
 
 	// Get Methods
 
-	public String getName() {
+ 	public String getName() {
 		return name;
 	}
 
@@ -47,20 +51,24 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		return passport;
 	}
 
-	public String[][] getPayrollData() {
+	public double getPayrollData() {
 		return payrollData;
 	}
 
-	public String[][] getCreditHistory() {
-		return creditHistory;
+	public double getCreditScore() {
+		return creditScore;
 	}
 
-	public String[][] getDebtInformation() {
+	public double getDebtInformation() {
 		return debtInformation;
 	}
 
-	public String[][] getInvestmentInformation() {
+	public double getInvestmentInformation() {
 		return investmentInformation;
+	}
+	
+	public boolean getRecommendation() {
+		return recommendation;
 	}
 
 	// Set Methods
@@ -75,6 +83,12 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ps.setObject(0, name);
 			ps.setObject(1, passport);
 			ps.executeQuery();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,12 +111,41 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		}
 	}
 
-	public void setPayrollData() {
-
+	public void setPayrollData(double appPayrollData) {
+		payrollData = appPayrollData;
+		Connection con = connectDatabase();
+		PreparedStatement ps;
+		
+		try {
+			ps = con.prepareStatement("UPDATE gta_agency.applicants SET payrollData = ? WHERE passportNumber = ?)");
+			ps.setObject(0, payrollData);
+			ps.setObject(1, passport);
+			ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public void setCreditHistory(String date, String credit) {
+	public void setCreditHistory(double appCreditScore) {
+		creditScore = appCreditScore;
+		Connection con = connectDatabase();
+		PreparedStatement ps;
+		
+		// get actual Time Stamp
+		// 1) create a java calendar instance
+		Calendar calendar = Calendar.getInstance();
 
+		// 2) get a java.util.Date from the calendar instance.
+//		    this date will represent the current instant, or "now".
+		java.util.Date now = calendar.getTime();
+
+		// 3) a java current time (now) instance
+		java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(now.getTime())
+		
+		try {
+			ps = con.prepareStatement("UPDATE gta_agency.applicants SET creditRating = ?, lastRating = ? WHERE passportNumber = ?)");
+			ps.setObject(0, creditScore);
+		}
 	}
 
 	public void setDebtInformation() {
