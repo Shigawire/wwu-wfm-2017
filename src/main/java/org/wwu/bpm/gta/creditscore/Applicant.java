@@ -40,7 +40,10 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 
 	}
 
-	// Get Methods
+	/*
+	 *  Get Methods(non-Javadoc)
+	 * @see org.camunda.bpm.application.AbstractProcessApplication#getName()
+	 */
 
 	public String getName() {
 		if (name == "") {
@@ -92,7 +95,10 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	public double getOutstandingCredits() {
 		return outstandingCredits;
 	}
-	// Set Methods
+	
+	/*
+	 *  Set Methods
+	 */
 
 	public void setName(String appName) {
 		name = appName;
@@ -222,7 +228,18 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 	}
 
 	public void setOutstandingCredits (double appOutstandingCredits) {
+		outstandingCredits = appOutstandingCredits;
+		Connection con = connectDatabase();
+		PreparedStatement ps;
 		
+		try {
+			ps = con.prepareStatement("UPDATE gta_agency.applicants SET outstandingCredits = ? WHERE passportNumber = ?)");
+			ps.setObject(0, outstandingCredits);
+			ps.setObject(1, passport);
+			ps.executeQuery();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	// enable connection to the database
 
