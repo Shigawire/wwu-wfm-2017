@@ -7,7 +7,7 @@
 </inputExpression>
       </input>
       <input id="InputClause_0y1ho5s" label="creditScore" camunda:inputVariable="creditScore">
-        <inputExpression id="LiteralExpression_0cn2fc3" typeRef="integer">        <text>creditScore</text>
+        <inputExpression id="LiteralExpression_0cn2fc3" typeRef="double">        <text>creditScore</text>
 </inputExpression>
       </input>
       <output id="output1" label="investigationNecessity" name="investigationNecessity" typeRef="integer" />
@@ -24,16 +24,16 @@
         <description></description>
         <inputEntry id="UnaryTests_1djdj5t">        <text><![CDATA[> 90, <= 180]]></text>
 </inputEntry>
-        <inputEntry id="UnaryTests_19qjo5v">        <text><![CDATA[>= 8]]></text>
+        <inputEntry id="UnaryTests_19qjo5v">        <text><![CDATA[>= 0.8]]></text>
 </inputEntry>
         <outputEntry id="LiteralExpression_0v7y1us">        <text>0</text>
 </outputEntry>
       </rule>
       <rule id="row-226070233-3">
-        <description>1 means the prior report is not valid any more, should investigate and generate new report. </description>
+        <description>1 means the prior report is not valid any more, should investigate and generate new report.</description>
         <inputEntry id="UnaryTests_14a5upy">        <text><![CDATA[> 90, <= 180]]></text>
 </inputEntry>
-        <inputEntry id="UnaryTests_1hwdyrq">        <text><![CDATA[< 8]]></text>
+        <inputEntry id="UnaryTests_1hwdyrq">        <text><![CDATA[< 0.8]]></text>
 </inputEntry>
         <outputEntry id="LiteralExpression_1lwcj8c">        <text>1</text>
 </outputEntry>

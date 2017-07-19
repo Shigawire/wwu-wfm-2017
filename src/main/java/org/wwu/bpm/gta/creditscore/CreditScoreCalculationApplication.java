@@ -1,5 +1,7 @@
 package org.wwu.bpm.gta.creditscore;
 
+import java.util.Map;
+
 import org.camunda.bpm.application.PostDeploy;
 import org.camunda.bpm.application.ProcessApplication;
 import org.camunda.bpm.application.impl.ServletProcessApplication;
@@ -12,21 +14,27 @@ import org.camunda.bpm.engine.variable.Variables;
 
 @ProcessApplication("Credit Score Calculation")
 
+
+
 public class CreditScoreCalculationApplication extends ServletProcessApplication {
 
   @PostDeploy
-  public void evaluateDecisionTable(ProcessEngine processEngine) {
+  public void evaluateDecisionTable(ProcessEngine processEngine, Map<String, Object> variables) {
 
     DecisionService decisionService = processEngine.getDecisionService();
 
-    VariableMap variables = Variables.createVariables()
-      .putValue("durationDay", 100)
-      .putValue("creditScore", 8);
+    VariableMap checkRecordVariables = Variables.createVariables()
+      .putValue("durationDay", variables.get("durationDay"))
+      .putValue("creditScore", variables.get("creditScore"));
 
-    DmnDecisionTableResult CheckRecord = decisionService.evaluateDecisionTableByKey("CheckRecord", variables);
-    String investigationNecessity = CheckRecord.getSingleEntry();
+    DmnDecisionTableResult CheckRecord = decisionService.evaluateDecisionTableByKey("CheckRecord", checkRecordVariables);
+    
+    int investigationNecessity = CheckRecord.getSingleEntry();
 
-    System.out.println("Is it necessary to investigate: " + investigationNecessity);
+    
   }
+
+
+
 
 }
