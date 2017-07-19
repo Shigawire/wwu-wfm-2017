@@ -45,8 +45,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		
 		try {
 			ps = con.prepareStatement("INSERT INTO gta_agency.applicants (passportNumber, firstName, lastName) VALUES"
-					+ "?,?,? WHERE NOT EXISTS (SELECT * FROM gta_agency.applicants"
-					+ "WHERE applicants.passportNumber = ?");
+					+ "(?, ?, ?) WHERE NOT EXISTS (SELECT * FROM gta_agency.applicants"
+					+ " WHERE applicants.passportNumber = ?)");
 			ps.setObject(0, passport);
 			ps.setObject(1, name);
 			ps.setObject(2, lastname);

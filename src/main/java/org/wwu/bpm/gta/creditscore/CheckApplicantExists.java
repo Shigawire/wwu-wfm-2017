@@ -24,6 +24,9 @@ public class CheckApplicantExists extends ServletProcessApplication implements J
 		String lastName = (String) execution.getVariable("lastName");
 		String passportNumber = (String) execution.getVariable("passportNumber");
 		
+		System.out.println("VARIABLES");
+		System.out.println(execution.getVariables());
+		
 		Object applicant = getApplicant(firstName, lastName, passportNumber);
 		
 		execution.setVariable("applicantExists", "true");
