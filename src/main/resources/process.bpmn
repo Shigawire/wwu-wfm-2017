@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.8.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.8.2">
   <bpmn:collaboration id="Collaboration_1mtmvdw">
     <bpmn:participant id="GTA_Agency" name="GTA Agency" processRef="Process_GTA_Agency" />
     <bpmn:participant id="Participant_1xwihtv" name="GMNY Bank" processRef="Process_174lh9l" />
@@ -71,7 +71,9 @@
     <bpmn:sequenceFlow id="SequenceFlow_1ajber6" name="No" sourceRef="ExclusiveGateway_0s4ahik" targetRef="Create_a_New_Account">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0v1n4fy" sourceRef="if_the_Applicant_Exist" targetRef="ExclusiveGateway_0s4ahik" />
+    <bpmn:sequenceFlow id="SequenceFlow_0v1n4fy" sourceRef="if_the_Applicant_Exist" targetRef="ExclusiveGateway_0s4ahik">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[ ${applicantExists.equals("true")}]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_156mf3m" sourceRef="New_Credit_Check_Request" targetRef="if_the_Applicant_Exist" />
     <bpmn:sequenceFlow id="SequenceFlow_0cblbk6" sourceRef="Start_Information_Collection" targetRef="ParallelGateway_0updnu7" />
     <bpmn:sequenceFlow id="SequenceFlow_0kmaomj" sourceRef="ParallelGateway_0updnu7" targetRef="Check_Payroll_Information" />
