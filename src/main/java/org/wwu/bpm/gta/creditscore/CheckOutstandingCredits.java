@@ -8,10 +8,11 @@ public class CheckOutstandingCredits extends ServletProcessApplication implement
 
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
-		// generates random variable in value range from 0 to 10 that represents an applicants outstanding dept situation
-				double OutstandingDebtScore = (double)(Math.random() * 1);	
-				execution.setVariable("OutstandingDebtScore", OutstandingDebtScore);
-		
+		// generates random variable in value range from 0 to 1 that represents an applicants outstanding dept situation
+			double OutstandingDebtScore = (double)(Math.random() * 1);	
+			execution.setVariable("OutstandingDebtScore", OutstandingDebtScore);
+			
+				
 	}
  
 }
