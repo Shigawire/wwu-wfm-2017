@@ -34,23 +34,20 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 
 	// Constructor: Create new Applicant object using name, lastname and Passport ID
 	public Applicant(String appName, String appLastname, String appPassport) {
-		name = appName;
-		lastname = appLastname;
-		passport = appPassport;
-		
+
 		// I know not best practice but no Idea how to do it else
 		// The following inserts the given Strings to the database if applicant is not stored already
 		Connection con = connectDatabase();
 		PreparedStatement ps;
 		
 		try {
-			ps = con.prepareStatement("INSERT INTO gta_agency.applicants (passportNumber, firstName, lastName) VALUES"
-					+ "(?, ?, ?) WHERE NOT EXISTS (SELECT * FROM gta_agency.applicants"
+			ps = con.prepareStatement("INSERT INTO gta_agency.applicants (firstName, lastName, passportNumber) VALUES"
+					+ " (?, ?, ?) WHERE NOT EXISTS (SELECT * FROM gta_agency.applicants"
 					+ " WHERE applicants.passportNumber = ?)");
-			ps.setObject(0, passport);
-			ps.setObject(1, name);
-			ps.setObject(2, lastname);
-			ps.setObject(3, passport);
+			ps.setString(0, appName);
+			ps.setString(1, appLastname);
+			ps.setString(2, appPassport);
+			ps.setString(3, appPassport);
 			ps.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -96,8 +93,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ResultSet rs;
 
 			try {
-				ps = con.prepareStatement("SELECT lastName FROM gta_agency.applicants WHERE passport = ?)");
-				ps.setObject(0, passport);
+				ps = con.prepareStatement("SELECT lastName FROM gta_agency.applicants WHERE passportNumber = ?)");
+				ps.setString(0, passport);
 				rs = ps.executeQuery();
 				lastname = rs.getString(1);
 			} catch (SQLException e) {
@@ -119,8 +116,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ResultSet rs;
 
 			try {
-				ps = con.prepareStatement("SELECT payrollData FROM gta_agency.applicants WHERE passport = ?)");
-				ps.setObject(0, passport);
+				ps = con.prepareStatement("SELECT payrollData FROM gta_agency.applicants WHERE passportNumber = ?)");
+				ps.setString(0, passport);
 				rs = ps.executeQuery();
 				payrollData = rs.getDouble(1);
 			} catch (SQLException e) {
@@ -138,8 +135,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ResultSet rs;
 
 			try {
-				ps = con.prepareStatement("SELECT creditRating FROM gta_agency.applicants WHERE passport = ?)");
-				ps.setObject(0, passport);
+				ps = con.prepareStatement("SELECT creditRating FROM gta_agency.applicants WHERE passportNumber = ?)");
+				ps.setString(0, passport);
 				rs = ps.executeQuery();
 				creditScore = rs.getDouble(1);
 			} catch (SQLException e) {
@@ -157,8 +154,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ResultSet rs;
 
 			try {
-				ps = con.prepareStatement("SELECT deptInformation FROM gta_agency.applicants WHERE passport = ?)");
-				ps.setObject(0, passport);
+				ps = con.prepareStatement("SELECT deptInformation FROM gta_agency.applicants WHERE passportNumber = ?)");
+				ps.setString(0, passport);
 				rs = ps.executeQuery();
 				debtInformation = rs.getDouble(1);
 			} catch (SQLException e) {
@@ -176,8 +173,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ResultSet rs;
 
 			try {
-				ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passport = ?)");
-				ps.setObject(0, passport);
+				ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passportNumber = ?)");
+				ps.setString(0, passport);
 				rs = ps.executeQuery();
 				investmentInformation = rs.getDouble(1);
 			} catch (SQLException e) {
@@ -195,8 +192,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		int rec = 0;
 
 		try {
-			ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passport = ?)");
-			ps.setObject(0, passport);
+			ps = con.prepareStatement("SELECT name FROM gta_agency.applicants WHERE passportNumber = ?)");
+			ps.setString(0, passport);
 			rs = ps.executeQuery();
 			rec = rs.getInt(1);
 		} catch (SQLException e) {
@@ -219,8 +216,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ResultSet rs;
 
 			try {
-				ps = con.prepareStatement("SELECT outstandingCredits FROM gta_agency.applicants WHERE passport = ?)");
-				ps.setObject(0, passport);
+				ps = con.prepareStatement("SELECT outstandingCredits FROM gta_agency.applicants WHERE passportNumber = ?)");
+				ps.setString(0, passport);
 				rs = ps.executeQuery();
 				outstandingCredits = rs.getDouble(1);
 			} catch (SQLException e) {
@@ -238,8 +235,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			ResultSet rs;
 
 			try {
-				ps = con.prepareStatement("SELECT lastRating FROM gta_agency.applicants WHERE passport = ?)");
-				ps.setObject(0, passport);
+				ps = con.prepareStatement("SELECT lastRating FROM gta_agency.applicants WHERE passportNumber = ?)");
+				ps.setString(0, passport);
 				rs = ps.executeQuery();
 				date = rs.getString(1);
 			} catch (SQLException e) {
@@ -260,8 +257,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 
 		try {
 			ps = con.prepareStatement("UPDATE applicants SET firstname = ? WHERE passportNumber = ?)");
-			ps.setObject(0, name);
-			ps.setObject(1, passport);
+			ps.setString(0, name);
+			ps.setString(1, passport);
 			ps.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -282,8 +279,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 
 		try {
 			ps = con.prepareStatement("UPDATE applicants SET lastname = ? WHERE passportNumber = ?)");
-			ps.setObject(0, lastname);
-			ps.setObject(1, passport);
+			ps.setString(0, lastname);
+			ps.setString(1, passport);
 			ps.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -298,8 +295,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 
 		try {
 			ps = con.prepareStatement("UPDATE gta_agency.applicants SET payrollData = ? WHERE passportNumber = ?)");
-			ps.setObject(0, payrollData);
-			ps.setObject(1, passport);
+			ps.setDouble(0, payrollData);
+			ps.setString(1, passport);
 			ps.executeQuery();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -318,9 +315,9 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		try {
 			ps = con.prepareStatement(
 					"UPDATE gta_agency.applicants SET creditRating = ?, lastRating = ? WHERE passportNumber = ?)");
-			ps.setObject(0, creditScore);
-			ps.setObject(1, date);
-			ps.setObject(2, passport);
+			ps.setDouble(0, creditScore);
+			ps.setString(1, date);
+			ps.setString(2, passport);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

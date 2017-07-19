@@ -10,7 +10,8 @@ public class SendCreditScoreReport extends ServletProcessApplication implements 
 	public void execute(DelegateExecution execution) throws Exception {
 		// TODO Auto-generated method stub
 		Applicant app;
-		app = (Applicant) execution.getVariable("Applicant");
+		app = (Applicant) execution.getVariable("applicant");
+		
 		String recom = "";
 
 		if(app.getRecommendation() == false){

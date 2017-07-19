@@ -6,6 +6,7 @@
     <bpmn:messageFlow id="MessageFlow_1nsv3h4" sourceRef="Send_Invoice_to_GMNY_Bank" targetRef="Participant_1xwihtv" />
     <bpmn:messageFlow id="MessageFlow_0jngn1h" sourceRef="Participant_1xwihtv" targetRef="Receive_Payment" />
     <bpmn:messageFlow id="MessageFlow_0psux98" sourceRef="Participant_1xwihtv" targetRef="New_Credit_Check_Request" />
+    <bpmn:messageFlow id="MessageFlow_0rcryvc" sourceRef="Send_Recommendation" targetRef="Participant_1xwihtv" />
   </bpmn:collaboration>
   <bpmn:process id="Process_GTA_Agency" isExecutable="true">
     <bpmn:laneSet>
@@ -42,7 +43,7 @@
         <bpmn:flowNodeRef>Receive_Payment</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:businessRuleTask id="CheckRecord" name="Check Record" camunda:decisionRef="CheckRecord">
+    <bpmn:businessRuleTask id="CheckRecord" name="Check Record" camunda:resultVariable="resultSet" camunda:decisionRef="CheckRecord" camunda:mapDecisionResult="singleResult">
       <bpmn:incoming>SequenceFlow_0s65lzw</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1xkpj09</bpmn:outgoing>
     </bpmn:businessRuleTask>
@@ -65,11 +66,11 @@
       <bpmn:outgoing>SequenceFlow_0u3kd44</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0s65lzw" name="Yes" sourceRef="ExclusiveGateway_0s4ahik" targetRef="CheckRecord">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${applicantExists.equals("true")}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1xkpj09" sourceRef="CheckRecord" targetRef="ExclusiveGateway_1rxx91v" />
     <bpmn:sequenceFlow id="SequenceFlow_1ajber6" name="No" sourceRef="ExclusiveGateway_0s4ahik" targetRef="Create_a_New_Account">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${applicantExists.equals("false")}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0v1n4fy" sourceRef="if_the_Applicant_Exist" targetRef="ExclusiveGateway_0s4ahik">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[ ${applicantExists.equals("true")}]]></bpmn:conditionExpression>
@@ -157,7 +158,7 @@
     </bpmn:serviceTask>
     <bpmn:dataStoreReference id="DataStoreReference_1qlemvf" name="Credit information" />
     <bpmn:sequenceFlow id="SequenceFlow_1rgml18" name="No" sourceRef="ExclusiveGateway_1rxx91v" targetRef="Send_Recommendation">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${resultSet.get("investigationNecessity") == 0}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:startEvent id="Create_Invoice" name="Create Invoice">
       <bpmn:outgoing>SequenceFlow_0s8pipg</bpmn:outgoing>
@@ -283,7 +284,7 @@
       <bpmn:outgoing>SequenceFlow_07sgky4</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0u3kd44" name="Yes" sourceRef="ExclusiveGateway_1rxx91v" targetRef="ExclusiveGateway_0hlduoj">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${resultSet.get("investigationNecessity") == 0}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0i4i64g" sourceRef="Correct_the_error" targetRef="ExclusiveGateway_0hlduoj" />
     <bpmn:sequenceFlow id="SequenceFlow_07sgky4" sourceRef="ExclusiveGateway_0hlduoj" targetRef="Start_Information_Collection" />
@@ -778,6 +779,13 @@
         <di:waypoint xsi:type="dc:Point" x="156" y="394" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="99.5" y="372" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="MessageFlow_0rcryvc_di" bpmnElement="MessageFlow_0rcryvc">
+        <di:waypoint xsi:type="dc:Point" x="1512" y="434" />
+        <di:waypoint xsi:type="dc:Point" x="1512" y="1188" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1527" y="804" width="0" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
