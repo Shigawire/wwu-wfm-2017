@@ -55,6 +55,13 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	/*
