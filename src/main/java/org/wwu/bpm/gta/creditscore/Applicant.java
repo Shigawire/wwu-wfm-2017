@@ -37,7 +37,24 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		name = appName;
 		lastname = appLastname;
 		passport = appPassport;
-
+		
+		// I know not best practice but no Idea how to do it else
+		// The following inserts the given Strings to the database if applicant is not stored already
+		Connection con = connectDatabase();
+		PreparedStatement ps;
+		
+		try {
+			ps = con.prepareStatement("INSERT INTO gta_agency.applicants (passportNumber, firstName, lastName) VALUES"
+					+ "?,?,? WHERE NOT EXISTS (SELECT * FROM gta_agency.applicants"
+					+ "WHERE applicants.passportNumber = ?");
+			ps.setObject(0, passport);
+			ps.setObject(1, name);
+			ps.setObject(2, lastname);
+			ps.setObject(3, passport);
+			ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*
