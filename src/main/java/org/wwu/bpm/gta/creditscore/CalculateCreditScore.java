@@ -15,10 +15,12 @@ public class CalculateCreditScore extends ServletProcessApplication  implements 
 	public void execute(DelegateExecution execution) throws Exception {
 		// TODO Auto-generated method stub
 		
-		Applicant a;
-		a = (Applicant)execution.getVariable("Applicant");
-		//Calculates the Score based on the DebtInformation, InvestmentInformation, OutstandingCredits and PayrollData
-		a.setCreditScore((a.getDebtInformation()+a.getInvestmentInformation()+a.getOutstandingCredits()+a.getPayrollData())/4);
+		String passportNumber = (String) execution.getVariable("passportNumber");
+		
+		Applicant applicant;
+		applicant = new Applicant(passportNumber);
+		
+		
 	}
 	
 	

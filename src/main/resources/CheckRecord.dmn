@@ -5,11 +5,11 @@
       <biodi:bounds x="200" y="200" width="180" height="80" />
     </extensionElements>
     <decisionTable id="decisionTable" hitPolicy="FIRST">
-      <input id="input1" label="durationDay" camunda:inputVariable="durationDay">
-        <inputExpression id="inputExpression1" typeRef="integer">        <text>durationDay</text>
+      <input id="input1" label="daysAgo" camunda:inputVariable="durationDay">
+        <inputExpression id="inputExpression1" typeRef="double">        <text>durationDay</text>
 </inputExpression>
       </input>
-      <input id="InputClause_0y1ho5s" label="creditScore" camunda:inputVariable="creditScore">
+      <input id="InputClause_0y1ho5s" label="creditRating" camunda:inputVariable="creditScore">
         <inputExpression id="LiteralExpression_0cn2fc3" typeRef="double">        <text>creditScore</text>
 </inputExpression>
       </input>

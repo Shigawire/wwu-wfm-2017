@@ -20,11 +20,11 @@ public class SendInvoice extends ServletProcessApplication implements JavaDelega
 		HttpClient client = HttpClients.createDefault();
 		
 		RequestBuilder requestBuilder = RequestBuilder.get()
-		.setUri("http://theirserver:8000/api/createinvoice")
+		.setUri("http://25.29.121.99:8000/api/createinvoice")
 		.addParameter("issuer", "GTA")
 		.addParameter("amount", "5000")
 		.addParameter("date", "1992-10-02")
-		.addParameter("payment_staus", "paid")
+		.addParameter("payment_status", "paid")
 		.addParameter("remark","ok");
 
 		// execute request

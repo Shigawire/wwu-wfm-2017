@@ -15,16 +15,31 @@ public class CheckApplicantExists extends ServletProcessApplication implements J
 	public void execute(DelegateExecution execution) throws Exception {
 		// TODO Auto-generated method stub
 		
-		String firstName = (String) execution.getVariable("firstName");
-		String lastName = (String) execution.getVariable("lastName");
 		String passportNumber = (String) execution.getVariable("passportNumber");
 		
-		Object applicant = new Applicant(firstName, lastName, passportNumber);
+		Applicant applicant = new Applicant(passportNumber);
 		
-		execution.setVariable("applicantExists", "true");
-		execution.setVariable("applicant", "none");
-		execution.setVariable("durationDay", 20);
-		execution.setVariable("creditScore", 10);
-		execution.setVariable("applicant", 1);
+		boolean applicantExists = applicant.existsInDatabase();
+		
+		execution.setVariable("applicantExists", applicantExists);
+		
+		if (applicantExists) {
+			applicant.loadFromDatabase();
+			execution.setVariable("creditRating", applicant.creditRating);
+			execution.setVariable("lastRating", applicant.lastRating);
+			
+			//how many days since the last rating 
+			double daysAgo = (System.currentTimeMillis() - applicant.lastRating.getTime()) / (24 * 60 * 60 * 1000d);
+
+			execution.setVariable("daysAgo", daysAgo);
+		} else {
+			//this should be the manual user task 
+			String firstName = (String) execution.getVariable("firstName");
+			String lastName = (String) execution.getVariable("lastName");
+			
+			applicant.createInDatabase(firstName, lastName);
+		}
+		
+		execution.setVariable("applicantPassport", passportNumber);
 	}
 }
