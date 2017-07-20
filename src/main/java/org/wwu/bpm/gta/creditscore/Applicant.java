@@ -107,12 +107,14 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		PreparedStatement ps;
 		ResultSet rs;
 		
+		System.out.println("Updating DB!");
+		
 		try {
 			ps = con.prepareStatement("UPDATE gta_agency.applicants SET firstName = ?, lastName = ?, creditRating = ?, lastRating = ? WHERE passportNumber = ?;");
 			ps.setString(1, firstName);
 			ps.setString(2, lastName);
 			ps.setDouble(3, this.creditRating);
-			ps.setDate(4, (java.sql.Date) this.lastRating);
+			ps.setDate(4, new java.sql.Date(this.lastRating.getTime()));
 			ps.setString(5, this.passportNumber);
 			ps.execute();			
 			
@@ -133,6 +135,8 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 		Connection con = connectDatabase();
 		PreparedStatement ps;
 		ResultSet rs;
+		
+		System.out.println("INSERT INTO");
 		
 		try {
 			ps = con.prepareStatement("INSERT INTO gta_agency.applicants (firstName, lastName, passportNumber) VALUES (?, ?, ?);");

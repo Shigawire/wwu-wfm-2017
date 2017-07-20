@@ -11,7 +11,6 @@
   <bpmn:process id="Process_GTA_Agency" isExecutable="true">
     <bpmn:laneSet>
       <bpmn:lane id="CreditCheckRequest" name="Credit Check Request">
-        <bpmn:flowNodeRef>CheckRecord</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_0s4ahik</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>if_the_Applicant_Exist</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>New_Credit_Check_Request</bpmn:flowNodeRef>
@@ -21,18 +20,15 @@
         <bpmn:flowNodeRef>ParallelGateway_0updnu7</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Start_Information_Collection</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ParallelGateway_1o13j6n</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Check_Error</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ExclusiveGateway_1gf422h</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Generate_Credit_Record</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Check_other_international_obligations_and_investments</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Correct_the_error</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>Create_a_New_Account</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Check_Payroll_Information</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>ExclusiveGateway_0hlduoj</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>CheckRecord</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Request_closed</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Send_Recommendation</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Infer_Recommendation</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ServiceTask_0t1wn8y</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>ExclusiveGateway_0hlduoj</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Calculate_Credit_Score</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Create_a_New_Account</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Invoicing" name="Invoicing">
         <bpmn:flowNodeRef>Create_Invoice</bpmn:flowNodeRef>
@@ -43,18 +39,14 @@
         <bpmn:flowNodeRef>Receive_Payment</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
-    <bpmn:businessRuleTask id="CheckRecord" name="Check Record" camunda:resultVariable="resultSet" camunda:decisionRef="CheckRecord" camunda:mapDecisionResult="singleResult">
-      <bpmn:incoming>SequenceFlow_0s65lzw</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1xkpj09</bpmn:outgoing>
-    </bpmn:businessRuleTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_0s4ahik" name="">
-      <bpmn:incoming>SequenceFlow_0v1n4fy</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0uwqir3</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0s65lzw</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_1ajber6</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_09ovva2</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:serviceTask id="if_the_Applicant_Exist" name="Check if the Applicant Exist" camunda:class="org.wwu.bpm.gta.creditscore.CheckApplicantExists">
       <bpmn:incoming>SequenceFlow_156mf3m</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0v1n4fy</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_0uwqir3</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:startEvent id="New_Credit_Check_Request" name="New Credit Check Request">
       <bpmn:outgoing>SequenceFlow_156mf3m</bpmn:outgoing>
@@ -66,15 +58,9 @@
       <bpmn:outgoing>SequenceFlow_0u3kd44</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="SequenceFlow_0s65lzw" name="Yes" sourceRef="ExclusiveGateway_0s4ahik" targetRef="CheckRecord">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${applicantExists.equals("true")}]]></bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${applicantExists.equals("yes")}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1xkpj09" sourceRef="CheckRecord" targetRef="ExclusiveGateway_1rxx91v" />
-    <bpmn:sequenceFlow id="SequenceFlow_1ajber6" name="No" sourceRef="ExclusiveGateway_0s4ahik" targetRef="Create_a_New_Account">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${applicantExists.equals("false")}]]></bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0v1n4fy" sourceRef="if_the_Applicant_Exist" targetRef="ExclusiveGateway_0s4ahik">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[ ${applicantExists.equals("true")}]]></bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_156mf3m" sourceRef="New_Credit_Check_Request" targetRef="if_the_Applicant_Exist" />
     <bpmn:sequenceFlow id="SequenceFlow_0cblbk6" sourceRef="Start_Information_Collection" targetRef="ParallelGateway_0updnu7" />
     <bpmn:sequenceFlow id="SequenceFlow_0kmaomj" sourceRef="ParallelGateway_0updnu7" targetRef="Check_Payroll_Information" />
@@ -85,15 +71,6 @@
     <bpmn:sequenceFlow id="SequenceFlow_0p7qpi4" sourceRef="Check_Payroll_Information" targetRef="ParallelGateway_1o13j6n" />
     <bpmn:sequenceFlow id="SequenceFlow_1teuuqq" sourceRef="Check_Outstanding_Credits" targetRef="ParallelGateway_1o13j6n" />
     <bpmn:sequenceFlow id="SequenceFlow_0s08rgi" sourceRef="Check_other_international_obligations_and_investments" targetRef="ParallelGateway_1o13j6n" />
-    <bpmn:sequenceFlow id="SequenceFlow_003jazy" sourceRef="ParallelGateway_1o13j6n" targetRef="Check_Error" />
-    <bpmn:sequenceFlow id="SequenceFlow_1m7a3gf" sourceRef="Send_Recommendation" targetRef="Request_closed" />
-    <bpmn:sequenceFlow id="SequenceFlow_1oapsg8" name="Yes" sourceRef="ExclusiveGateway_1gf422h" targetRef="Generate_Credit_Record">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_1mkeuat" sourceRef="Check_Error" targetRef="ExclusiveGateway_1gf422h" />
-    <bpmn:sequenceFlow id="SequenceFlow_0vh0avk" name="No" sourceRef="ExclusiveGateway_1gf422h" targetRef="Correct_the_error">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" />
-    </bpmn:sequenceFlow>
     <bpmn:serviceTask id="Check_International_Debts" name="Check International Debts" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.CheckInternationalDebts">
       <bpmn:incoming>SequenceFlow_0bpriuq</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0p00ie2</bpmn:outgoing>
@@ -138,26 +115,9 @@
       <bpmn:incoming>SequenceFlow_1teuuqq</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0p00ie2</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0s08rgi</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_003jazy</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_1scz130</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:businessRuleTask id="Check_Error" name="Check Error" implementation="##WebService" camunda:decisionRef="CheckError">
-      <bpmn:incoming>SequenceFlow_003jazy</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1mkeuat</bpmn:outgoing>
-    </bpmn:businessRuleTask>
-    <bpmn:exclusiveGateway id="ExclusiveGateway_1gf422h" name="No Error Exists" gatewayDirection="Diverging">
-      <bpmn:incoming>SequenceFlow_1mkeuat</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1oapsg8</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_0vh0avk</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:serviceTask id="Generate_Credit_Record" name="Generate Credit Record" camunda:class="org.wwu.bpm.gta.creditscore.GenerateCreditRecord">
-      <bpmn:incoming>SequenceFlow_1oapsg8</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1m4694z</bpmn:outgoing>
-      <bpmn:dataOutputAssociation id="DataOutputAssociation_1k12gw0">
-        <bpmn:targetRef>DataStoreReference_1qlemvf</bpmn:targetRef>
-      </bpmn:dataOutputAssociation>
-    </bpmn:serviceTask>
-    <bpmn:dataStoreReference id="DataStoreReference_1qlemvf" name="Credit information" />
-    <bpmn:sequenceFlow id="SequenceFlow_1rgml18" name="No" sourceRef="ExclusiveGateway_1rxx91v" targetRef="Send_Recommendation">
+    <bpmn:sequenceFlow id="SequenceFlow_1rgml18" name="No" sourceRef="ExclusiveGateway_1rxx91v" targetRef="Infer_Recommendation">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${resultSet.get("investigationNecessity") == 0}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:startEvent id="Create_Invoice" name="Create Invoice">
@@ -204,19 +164,10 @@
         <bpmn:targetRef>Property_0rbapso</bpmn:targetRef>
       </bpmn:dataInputAssociation>
     </bpmn:serviceTask>
-    <bpmn:userTask id="Correct_the_error" name="Correct the error" implementation="##WebService">
-      <bpmn:incoming>SequenceFlow_0vh0avk</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0i4i64g</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:dataObjectReference id="Investment_Information" name="Investment Information" dataObjectRef="DataObject_17ep2ra" />
     <bpmn:dataObject id="DataObject_17ep2ra" />
     <bpmn:dataObjectReference id="Debt_Information" name="Debt Information" dataObjectRef="DataObject_0yeyjjd" />
     <bpmn:dataObject id="DataObject_0yeyjjd" />
-    <bpmn:sequenceFlow id="SequenceFlow_1kwzyy0" sourceRef="Create_a_New_Account" targetRef="ExclusiveGateway_0hlduoj" />
-    <bpmn:userTask id="Create_a_New_Account" name="Create a New Account">
-      <bpmn:incoming>SequenceFlow_1ajber6</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_1kwzyy0</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:serviceTask id="Check_Payroll_Information" name="Check Payroll Information" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.CheckPayrollInformation">
       <bpmn:incoming>SequenceFlow_0kmaomj</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0p7qpi4</bpmn:outgoing>
@@ -233,17 +184,30 @@
     </bpmn:serviceTask>
     <bpmn:dataObjectReference id="Payroll_Data" name="Payroll Data" dataObjectRef="DataObject_0apx88m" />
     <bpmn:dataObject id="DataObject_0apx88m" />
+    <bpmn:exclusiveGateway id="ExclusiveGateway_0hlduoj">
+      <bpmn:incoming>SequenceFlow_0u3kd44</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_0iz0lrf</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_07sgky4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0u3kd44" name="Yes" sourceRef="ExclusiveGateway_1rxx91v" targetRef="ExclusiveGateway_0hlduoj">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${resultSet.get("investigationNecessity") == 1}]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="SequenceFlow_07sgky4" sourceRef="ExclusiveGateway_0hlduoj" targetRef="Start_Information_Collection" />
+    <bpmn:businessRuleTask id="CheckRecord" name="Check Record" camunda:resultVariable="resultSet" camunda:decisionRef="CheckRecord" camunda:mapDecisionResult="singleResult">
+      <bpmn:incoming>SequenceFlow_0s65lzw</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1xkpj09</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:dataStoreReference id="DataStoreReference_1qlemvf" name="Credit information" />
     <bpmn:endEvent id="Request_closed" name="Request closed">
       <bpmn:incoming>SequenceFlow_1m7a3gf</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sendTask id="Send_Recommendation" name="&#10;Send Credit History, Rating and Recommendation" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.SendCreditScoreReport">
-      <bpmn:incoming>SequenceFlow_1rgml18</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_1mta7s0</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1m7a3gf</bpmn:outgoing>
     </bpmn:sendTask>
-    <bpmn:sequenceFlow id="SequenceFlow_1mta7s0" sourceRef="Infer_Recommendation" targetRef="Send_Recommendation" />
     <bpmn:serviceTask id="Infer_Recommendation" name="Infer Recommendation" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.InferRecommendation">
       <bpmn:incoming>SequenceFlow_0yx044c</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1rgml18</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1mta7s0</bpmn:outgoing>
       <bpmn:ioSpecification>
         <bpmn:dataOutput />
@@ -254,8 +218,8 @@
         <bpmn:targetRef>DataObjectReference_0abduxe</bpmn:targetRef>
       </bpmn:dataOutputAssociation>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="ServiceTask_0t1wn8y" name="Calculate Credit Score" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.CalculateCreditScore">
-      <bpmn:incoming>SequenceFlow_1m4694z</bpmn:incoming>
+    <bpmn:serviceTask id="Calculate_Credit_Score" name="Calculate Credit Score" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.CalculateCreditScore">
+      <bpmn:incoming>SequenceFlow_1scz130</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0yx044c</bpmn:outgoing>
       <bpmn:ioSpecification>
         <bpmn:dataOutput />
@@ -273,24 +237,29 @@
     </bpmn:serviceTask>
     <bpmn:dataObjectReference id="DataObjectReference_0bor3g7" name="Credit Score" dataObjectRef="DataObject_0uu1wmx" />
     <bpmn:dataObject id="DataObject_0uu1wmx" />
-    <bpmn:sequenceFlow id="SequenceFlow_1m4694z" sourceRef="Generate_Credit_Record" targetRef="ServiceTask_0t1wn8y" />
-    <bpmn:sequenceFlow id="SequenceFlow_0yx044c" sourceRef="ServiceTask_0t1wn8y" targetRef="Infer_Recommendation" />
     <bpmn:dataObjectReference id="DataObjectReference_0abduxe" name="Credit Recommendation" dataObjectRef="DataObject_0spuat9" />
     <bpmn:dataObject id="DataObject_0spuat9" />
-    <bpmn:exclusiveGateway id="ExclusiveGateway_0hlduoj">
-      <bpmn:incoming>SequenceFlow_1kwzyy0</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_0u3kd44</bpmn:incoming>
-      <bpmn:incoming>SequenceFlow_0i4i64g</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_07sgky4</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="SequenceFlow_0u3kd44" name="Yes" sourceRef="ExclusiveGateway_1rxx91v" targetRef="ExclusiveGateway_0hlduoj">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${resultSet.get("investigationNecessity") == 0}]]></bpmn:conditionExpression>
+    <bpmn:sequenceFlow id="SequenceFlow_1m7a3gf" sourceRef="Send_Recommendation" targetRef="Request_closed" />
+    <bpmn:sequenceFlow id="SequenceFlow_1mta7s0" sourceRef="Infer_Recommendation" targetRef="Send_Recommendation" />
+    <bpmn:sequenceFlow id="SequenceFlow_0yx044c" sourceRef="Calculate_Credit_Score" targetRef="Infer_Recommendation" />
+    <bpmn:sequenceFlow id="SequenceFlow_1scz130" sourceRef="ParallelGateway_1o13j6n" targetRef="Calculate_Credit_Score" />
+    <bpmn:sequenceFlow id="SequenceFlow_0uwqir3" sourceRef="if_the_Applicant_Exist" targetRef="ExclusiveGateway_0s4ahik" />
+    <bpmn:sequenceFlow id="SequenceFlow_09ovva2" name="No" sourceRef="ExclusiveGateway_0s4ahik" targetRef="Create_a_New_Account">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${applicantExists.equals("no")}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_0i4i64g" sourceRef="Correct_the_error" targetRef="ExclusiveGateway_0hlduoj" />
-    <bpmn:sequenceFlow id="SequenceFlow_07sgky4" sourceRef="ExclusiveGateway_0hlduoj" targetRef="Start_Information_Collection" />
-    <bpmn:association id="Association_1e5yeyr" sourceRef="Check_Error" targetRef="Monitoring_System" />
-    <bpmn:textAnnotation id="Monitoring_System">    <bpmn:text>Monitoring System</bpmn:text>
-</bpmn:textAnnotation>
+    <bpmn:userTask id="Create_a_New_Account" name="Create a New Account" camunda:formKey="embedded:app:forms/CreatANewAccount.html" camunda:assignee="demp">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="ApplicantFirstName" type="string" />
+          <camunda:formField id="ApplicantLastName" type="string" />
+          <camunda:formField id="PassportNumber" type="string" />
+        </camunda:formData>
+        <camunda:taskListener class="org.wwu.bpm.gta.creditscore.AddApplicantToDatabase" event="complete" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>SequenceFlow_09ovva2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0iz0lrf</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="SequenceFlow_0iz0lrf" sourceRef="Create_a_New_Account" targetRef="ExclusiveGateway_0hlduoj" />
   </bpmn:process>
   <bpmn:process id="Process_174lh9l" isExecutable="false" />
   <bpmn:message id="Message_1twm4h5" name="Message_CreditCheckRequest" />
@@ -322,34 +291,14 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BusinessRuleTask_0ujnyqo_di" bpmnElement="CheckRecord">
-        <dc:Bounds x="-151" y="224" width="100" height="80" />
+        <dc:Bounds x="-200" y="224" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="UserTask_1i12rf1_di" bpmnElement="Create_a_New_Account">
-        <dc:Bounds x="-151" y="354" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0v1n4fy_di" bpmnElement="SequenceFlow_0v1n4fy">
-        <di:waypoint xsi:type="dc:Point" x="-402" y="329" />
-        <di:waypoint xsi:type="dc:Point" x="-346" y="329" />
-        <di:waypoint xsi:type="dc:Point" x="-346" y="329" />
-        <di:waypoint xsi:type="dc:Point" x="-277" y="329" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="-376" y="322.5" width="90" height="13" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0s65lzw_di" bpmnElement="SequenceFlow_0s65lzw">
         <di:waypoint xsi:type="dc:Point" x="-252" y="304" />
         <di:waypoint xsi:type="dc:Point" x="-252" y="264" />
-        <di:waypoint xsi:type="dc:Point" x="-151" y="264" />
+        <di:waypoint xsi:type="dc:Point" x="-200" y="264" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="-242" y="284" width="18" height="12" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1ajber6_di" bpmnElement="SequenceFlow_1ajber6">
-        <di:waypoint xsi:type="dc:Point" x="-252" y="354" />
-        <di:waypoint xsi:type="dc:Point" x="-252" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="-151" y="394" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="-243" y="352.1025641025641" width="15" height="12" />
+          <dc:Bounds x="-242" y="284" width="18" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ExclusiveGateway_1rxx91v_di" bpmnElement="ExclusiveGateway_1rxx91v" isMarkerVisible="true">
@@ -371,10 +320,10 @@
         <dc:Bounds x="156" y="354" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1xkpj09_di" bpmnElement="SequenceFlow_1xkpj09">
-        <di:waypoint xsi:type="dc:Point" x="-51" y="264" />
+        <di:waypoint xsi:type="dc:Point" x="-100" y="264" />
         <di:waypoint xsi:type="dc:Point" x="-2" y="264" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="-26.5" y="242" width="0" height="13" />
+          <dc:Bounds x="-96" y="242.5" width="90" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ParallelGateway_0updnu7_di" bpmnElement="ParallelGateway_0updnu7">
@@ -476,97 +425,35 @@
           <dc:Bounds x="619" y="591.5" width="0" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="BusinessRuleTask_0emjjzp_di" bpmnElement="Check_Error">
-        <dc:Bounds x="768" y="354" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_076skb9_di" bpmnElement="Monitoring_System">
-        <dc:Bounds x="786" y="191" width="63" height="57" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ExclusiveGateway_1gf422h_di" bpmnElement="ExclusiveGateway_1gf422h" isMarkerVisible="true">
-        <dc:Bounds x="926" y="374" width="40" height="40" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="909" y="353" width="74" height="12" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="ServiceTask_0cvn0u9_di" bpmnElement="Generate_Credit_Record">
-        <dc:Bounds x="1028" y="354" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataStoreReference_1qlemvf_di" bpmnElement="DataStoreReference_1qlemvf">
-        <dc:Bounds x="1224" y="131" width="62" height="60" />
+        <dc:Bounds x="1007" y="131" width="62" height="60" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1210" y="196" width="87" height="12" />
+          <dc:Bounds x="993" y="196" width="87" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="SendTask_0w017l6_di" bpmnElement="Send_Recommendation">
-        <dc:Bounds x="1486" y="354" width="100" height="80" />
+        <dc:Bounds x="1269" y="354" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="EndEvent_0ac2tlt_di" bpmnElement="Request_closed">
-        <dc:Bounds x="1634" y="380" width="28" height="28" />
+        <dc:Bounds x="1417" y="380" width="28" height="28" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1610" y="410" width="76" height="13" />
+          <dc:Bounds x="1393" y="410" width="76" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_003jazy_di" bpmnElement="SequenceFlow_003jazy">
-        <di:waypoint xsi:type="dc:Point" x="697" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="733" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="733" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="768" y="394" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="748" y="387.5" width="0" height="13" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_1e5yeyr_di" bpmnElement="Association_1e5yeyr">
-        <di:waypoint xsi:type="dc:Point" x="818" y="354" />
-        <di:waypoint xsi:type="dc:Point" x="819" y="248" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1mkeuat_di" bpmnElement="SequenceFlow_1mkeuat">
-        <di:waypoint xsi:type="dc:Point" x="868" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="900" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="900" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="926" y="394" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="915" y="387.5" width="0" height="13" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1oapsg8_di" bpmnElement="SequenceFlow_1oapsg8">
-        <di:waypoint xsi:type="dc:Point" x="966" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="995" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="995" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="1028" y="394" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="973" y="375" width="18" height="12" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="DataOutputAssociation_1k12gw0_di" bpmnElement="DataOutputAssociation_1k12gw0">
-        <di:waypoint xsi:type="dc:Point" x="1078" y="354" />
-        <di:waypoint xsi:type="dc:Point" x="1078" y="181" />
-        <di:waypoint xsi:type="dc:Point" x="1220" y="181" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1m7a3gf_di" bpmnElement="SequenceFlow_1m7a3gf">
-        <di:waypoint xsi:type="dc:Point" x="1586" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="1635" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="1369" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="1418" y="394" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1565.5" y="372.5" width="90" height="13" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="UserTask_07ant73_di" bpmnElement="Correct_the_error">
-        <dc:Bounds x="686" y="674" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="SequenceFlow_0vh0avk_di" bpmnElement="SequenceFlow_0vh0avk">
-        <di:waypoint xsi:type="dc:Point" x="946" y="414" />
-        <di:waypoint xsi:type="dc:Point" x="946" y="714" />
-        <di:waypoint xsi:type="dc:Point" x="786" y="714" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="952" y="420" width="15" height="12" />
+          <dc:Bounds x="1349" y="373" width="90" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1rgml18_di" bpmnElement="SequenceFlow_1rgml18">
         <di:waypoint xsi:type="dc:Point" x="18" y="244" />
         <di:waypoint xsi:type="dc:Point" x="18" y="55" />
-        <di:waypoint xsi:type="dc:Point" x="1536" y="55" />
-        <di:waypoint xsi:type="dc:Point" x="1536" y="354" />
+        <di:waypoint xsi:type="dc:Point" x="1173" y="55" />
+        <di:waypoint xsi:type="dc:Point" x="1173" y="351" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="23" y="226" width="15" height="12" />
+          <dc:Bounds x="23" y="226" width="15" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="StartEvent_19yin6p_di" bpmnElement="Create_Invoice">
@@ -680,15 +567,15 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjectReference_0bor3g7_di" bpmnElement="DataObjectReference_0bor3g7">
-        <dc:Bounds x="1227" y="474" width="36" height="50" />
+        <dc:Bounds x="1010" y="474" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1214" y="527" width="62" height="12" />
+          <dc:Bounds x="997" y="527" width="62" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjectReference_0abduxe_di" bpmnElement="DataObjectReference_0abduxe">
-        <dc:Bounds x="1372" y="466" width="36" height="50" />
+        <dc:Bounds x="1155" y="466" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1347" y="519" width="87" height="24" />
+          <dc:Bounds x="1130" y="519" width="87" height="25" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataInputAssociation_1r6wv0e_di" bpmnElement="DataInputAssociation_1r6wv0e">
@@ -707,51 +594,37 @@
         <di:waypoint xsi:type="dc:Point" x="438" y="526" />
         <di:waypoint xsi:type="dc:Point" x="496.1734143049933" y="570.4419703103913" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1kwzyy0_di" bpmnElement="SequenceFlow_1kwzyy0">
-        <di:waypoint xsi:type="dc:Point" x="-51" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="-7" y="394" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="-74" y="372.5" width="90" height="13" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0mb1lzv_di" bpmnElement="Infer_Recommendation">
-        <dc:Bounds x="1340" y="354" width="100" height="80" />
+        <dc:Bounds x="1123" y="354" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_1mta7s0_di" bpmnElement="SequenceFlow_1mta7s0">
-        <di:waypoint xsi:type="dc:Point" x="1440" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="1486" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="1223" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="1269" y="394" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1463" y="372.5" width="0" height="13" />
+          <dc:Bounds x="1201" y="373" width="90" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="ServiceTask_0t1wn8y_di" bpmnElement="ServiceTask_0t1wn8y">
-        <dc:Bounds x="1194" y="354" width="100" height="80" />
+      <bpmndi:BPMNShape id="ServiceTask_0t1wn8y_di" bpmnElement="Calculate_Credit_Score">
+        <dc:Bounds x="977" y="354" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="DataInputAssociation_1pp9gr5_di" bpmnElement="DataInputAssociation_1pp9gr5">
-        <di:waypoint xsi:type="dc:Point" x="1255" y="191" />
-        <di:waypoint xsi:type="dc:Point" x="1257.2510711225364" y="352.3787489288775" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_1m4694z_di" bpmnElement="SequenceFlow_1m4694z">
-        <di:waypoint xsi:type="dc:Point" x="1128" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="1194" y="394" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1161" y="372" width="0" height="13" />
-        </bpmndi:BPMNLabel>
+        <di:waypoint xsi:type="dc:Point" x="1038" y="191" />
+        <di:waypoint xsi:type="dc:Point" x="1040.2510711225364" y="352.3787489288775" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0yx044c_di" bpmnElement="SequenceFlow_0yx044c">
-        <di:waypoint xsi:type="dc:Point" x="1294" y="394" />
-        <di:waypoint xsi:type="dc:Point" x="1340" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="1077" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="1123" y="394" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1317" y="372" width="0" height="13" />
+          <dc:Bounds x="1055" y="372" width="90" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataOutputAssociation_1si54fu_di" bpmnElement="DataOutputAssociation_1si54fu">
-        <di:waypoint xsi:type="dc:Point" x="1245" y="434" />
-        <di:waypoint xsi:type="dc:Point" x="1246.2510711225364" y="472.3787489288775" />
+        <di:waypoint xsi:type="dc:Point" x="1028" y="434" />
+        <di:waypoint xsi:type="dc:Point" x="1029.2510711225364" y="472.3787489288775" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataOutputAssociation_04vksv5_di" bpmnElement="DataOutputAssociation_04vksv5">
-        <di:waypoint xsi:type="dc:Point" x="1390" y="434" />
-        <di:waypoint xsi:type="dc:Point" x="1390" y="465" />
+        <di:waypoint xsi:type="dc:Point" x="1173" y="434" />
+        <di:waypoint xsi:type="dc:Point" x="1173" y="465" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ExclusiveGateway_0hlduoj_di" bpmnElement="ExclusiveGateway_0hlduoj" isMarkerVisible="true">
         <dc:Bounds x="-7" y="369" width="50" height="50" />
@@ -766,14 +639,6 @@
           <dc:Bounds x="20" y="291" width="18" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="SequenceFlow_0i4i64g_di" bpmnElement="SequenceFlow_0i4i64g">
-        <di:waypoint xsi:type="dc:Point" x="686" y="713" />
-        <di:waypoint xsi:type="dc:Point" x="18" y="713" />
-        <di:waypoint xsi:type="dc:Point" x="18" y="419" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="307" y="691.5" width="90" height="13" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_07sgky4_di" bpmnElement="SequenceFlow_07sgky4">
         <di:waypoint xsi:type="dc:Point" x="43" y="394" />
         <di:waypoint xsi:type="dc:Point" x="156" y="394" />
@@ -782,10 +647,42 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="MessageFlow_0rcryvc_di" bpmnElement="MessageFlow_0rcryvc">
-        <di:waypoint xsi:type="dc:Point" x="1512" y="434" />
-        <di:waypoint xsi:type="dc:Point" x="1512" y="1188" />
+        <di:waypoint xsi:type="dc:Point" x="1295" y="434" />
+        <di:waypoint xsi:type="dc:Point" x="1295" y="1188" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1527" y="804" width="0" height="13" />
+          <dc:Bounds x="1265" y="804.5" width="90" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_1scz130_di" bpmnElement="SequenceFlow_1scz130">
+        <di:waypoint xsi:type="dc:Point" x="697" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="977" y="394" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="837" y="372" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0uwqir3_di" bpmnElement="SequenceFlow_0uwqir3">
+        <di:waypoint xsi:type="dc:Point" x="-402" y="329" />
+        <di:waypoint xsi:type="dc:Point" x="-277" y="329" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-339.5" y="307" width="0" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="UserTask_0db1w9k_di" bpmnElement="Create_a_New_Account">
+        <dc:Bounds x="-200" y="354" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_09ovva2_di" bpmnElement="SequenceFlow_09ovva2">
+        <di:waypoint xsi:type="dc:Point" x="-252" y="354" />
+        <di:waypoint xsi:type="dc:Point" x="-252" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="-200" y="394" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-244" y="368" width="15" height="13" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="SequenceFlow_0iz0lrf_di" bpmnElement="SequenceFlow_0iz0lrf">
+        <di:waypoint xsi:type="dc:Point" x="-100" y="394" />
+        <di:waypoint xsi:type="dc:Point" x="-7" y="394" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-53.5" y="372" width="0" height="13" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

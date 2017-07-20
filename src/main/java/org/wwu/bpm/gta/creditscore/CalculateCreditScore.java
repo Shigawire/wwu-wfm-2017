@@ -1,9 +1,6 @@
 package org.wwu.bpm.gta.creditscore;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.Date;
 
 import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -17,8 +14,19 @@ public class CalculateCreditScore extends ServletProcessApplication  implements 
 		
 		String passportNumber = (String) execution.getVariable("passportNumber");
 		
-		Applicant applicant;
-		applicant = new Applicant(passportNumber);
+		Applicant applicant = new Applicant(passportNumber);
+		applicant.loadFromDatabase();
+
+		double InternationalDebtScore = (double) execution.getVariable("InternationalDebtScore");
+		double InternationalObligationScore = (double) execution.getVariable("InternationalObligationScore");
+		double OutstandingDebtScore = (double) execution.getVariable("OutstandingDebtScore");
+		double PayrollScore = (double) execution.getVariable("PayrollScore");
+		
+		double creditRating =  (InternationalDebtScore + InternationalObligationScore + OutstandingDebtScore + PayrollScore)/4;
+		
+		applicant.creditRating = creditRating;
+		applicant.lastRating = new Date();
+		applicant.updateDatabase();
 		
 		
 	}

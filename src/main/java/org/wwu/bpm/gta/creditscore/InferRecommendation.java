@@ -9,22 +9,21 @@ public class InferRecommendation extends ServletProcessApplication  implements J
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		
-		// TODO Auto-generated method stub
-		//boolean recommendation is set false in default
-//		Applicant app;
-//		app = (Applicant) execution.getVariable("Applicant");
-//		boolean creditRecommendation = false; 
-//		double creditScore = app.getCreditScore();
-//		
-//		//if the creditScore is equal to or higher than 0.8 the recommendation is true
-//		
-//		if(creditScore >= 0.8){
-//		creditRecommendation = true;
-//	}else{
-//		creditRecommendation = false; 
-//		}
-//	app.setRecommendation(creditRecommendation);
-//	}
+		String passportNumber = (String) execution.getVariable("passportNumber");
+		
+		Applicant applicant = new Applicant(passportNumber);
+		applicant.loadFromDatabase();
+		
+		double creditRating = applicant.creditRating;
+
+		//if the credit score is > 0.8
+		int creditRecommendation = 0;
+		
+		if (creditRating >= 0.8) {
+			creditRecommendation = 1;
+		}
+		
+		execution.setVariable("creditRecommendation", creditRecommendation);
 	}
  
 }

@@ -1,26 +1,39 @@
-<form name="CreatANewAccount">
+<script cam-script type="text/form-script">
+    camForm.on('form-loaded', function() {
+      camForm.variableManager.fetchVariable('passportNumber');
+    });
+    camForm.on('variables-restored', function() {
+      $scope.passportNumber = camForm.variableManager.variableValue('passportNumber');
+      console.log("setting variables to scope");
+    });
+
+console.log($scope.passportNumber);
+  </script>
+  
+  <form name="CreatANewAccount">
   <div class="form-group">
     <label for="ApplicantFirstName">Applicant First Name</label>
     <input class="form-control"
-           FirstName-variable-type="String"
-           FirstName-variable-name="ApplicantFirstName"
+           cam-variable-type="String"
+           cam-variable-name="ApplicantFirstName"
            name="ApplicantFirstName"
             />
   </div>
   <div class="form-group">
     <label for="ApplicantLastName">Applicant Last Name</label>
     <input class="form-control"
-           LastName-variable-type="String"
-           LastName-variable-name="ApplicantLastName"
+           cam-variable-type="String"
+           cam-variable-name="ApplicantLastName"
            name="ApplicantLastName"
             />
   </div>
   <div class="form-group">
     <label for="PassportNumber">Passport Number</label>
     <input class="form-control"
-           LastName-variable-type="String"
-           LastName-variable-name="PassportNumber"
-           name="PassportNumber"
+           cam-variable-type="String"
+           cam-variable-name="ApplicantPassportNumber"
+           name="ApplicantPassportNumber"
+           value="DE12345678"
             />
   </div>
 </form>

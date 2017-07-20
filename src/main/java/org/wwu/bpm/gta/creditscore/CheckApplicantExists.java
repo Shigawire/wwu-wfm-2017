@@ -21,7 +21,7 @@ public class CheckApplicantExists extends ServletProcessApplication implements J
 		
 		boolean applicantExists = applicant.existsInDatabase();
 		
-		execution.setVariable("applicantExists", applicantExists);
+		execution.setVariable("applicantExists", (applicantExists) ? "yes" : "no");
 		
 		if (applicantExists) {
 			applicant.loadFromDatabase();
@@ -34,12 +34,10 @@ public class CheckApplicantExists extends ServletProcessApplication implements J
 			execution.setVariable("daysAgo", daysAgo);
 		} else {
 			//this should be the manual user task 
-			String firstName = (String) execution.getVariable("firstName");
-			String lastName = (String) execution.getVariable("lastName");
+			//String firstName = (String) execution.getVariable("firstName");
+			//String lastName = (String) execution.getVariable("lastName");
 			
-			applicant.createInDatabase(firstName, lastName);
+			//applicant.createInDatabase(firstName, lastName);
 		}
-		
-		execution.setVariable("applicantPassport", passportNumber);
 	}
 }

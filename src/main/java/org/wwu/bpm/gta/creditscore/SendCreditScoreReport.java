@@ -1,5 +1,10 @@
 package org.wwu.bpm.gta.creditscore;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.camunda.bpm.application.impl.ServletProcessApplication;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -15,30 +20,30 @@ public class SendCreditScoreReport extends ServletProcessApplication implements 
 		
 		applicant.loadFromDatabase();
 		
+		String recomm = (applicant.creditRecommendation == 1) ? "yes" : "no";
 		
+		System.out.println("Credit Score Recommendation Process done");
+		System.out.println("Applicants Credit Score is " + applicant.creditRating);
+		System.out.println("Our recommendation is: " + recomm);
 		
-
-//		if(app.getRecommendation() == false){
-//			System.out.println("The applicant with the name " + app.getName() + " " + app.getLastname() + " with "
-//					+ "the passport-ID: " + app.getPassport() + " should be declined due to a creditscore of "
-//					+ app.getCreditScore() + " which is not trustworthy!");
-//			//recom is a placeholder to make sure that a String is given to the other group 
-//			//as a recommendation statement
-//			recom = "fail"; 
-//		}else if(app.getRecommendation() == true){
-//			System.out.println("The applicant with the name " + app.getName() + " " + app.getLastname() + " with "
-//					+ "the passport-ID: " + app.getPassport() + " is recommended to be able to get a credit"
-//							+ " due to a creditscore of "
-//					+ app.getCreditScore() + " which is trustworthy!");
-//			//recom is a placeholder to make sure that a String is given to the other group 
-//			//as a recommendation statement
-//			recom = "pass";
-//		}else {
-//			System.out.println("Something went wrong!");
-//			//recom is a placeholder to make sure that a String is given to the other group 
-//			//as a recommendation statement
-//			recom = "failure!"; 
-//		}
+		System.out.println("Submitting recommendation back...");
+		
+		HttpClient client = HttpClients.createDefault();
+			
+			RequestBuilder requestBuilder = RequestBuilder.get()
+			.setUri("http://25.29.121.99:8000/api/creditrating")
+			.addParameter("customer_id", "1")
+			.addParameter("rating", applicant.creditRating.toString())
+			.addParameter("validityFrom", "2007-08-09")
+			.addParameter("validityTo", "2008-09-08");
+				
+			// execute request
+			HttpUriRequest request = requestBuilder.build();
+			HttpResponse response = client.execute(request);
+			// log debug information
+			System.out.println(request.getURI());
+			System.out.println(response.getStatusLine());
+			
 	}
 
 }
