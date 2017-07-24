@@ -20,7 +20,9 @@ public class SendCreditScoreReport extends ServletProcessApplication implements 
 		
 		applicant.loadFromDatabase();
 		
-		String recomm = (applicant.creditRecommendation == 1) ? "yes" : "no";
+		int recommendation = (int) execution.getVariable("creditRecommendation");
+		
+		String recomm = (recommendation == 1) ? "yes" : "no";
 		
 		System.out.println("Credit Score Recommendation Process done");
 		System.out.println("Applicants Credit Score is " + applicant.creditRating);
@@ -39,10 +41,10 @@ public class SendCreditScoreReport extends ServletProcessApplication implements 
 				
 			// execute request
 			HttpUriRequest request = requestBuilder.build();
-			HttpResponse response = client.execute(request);
-			// log debug information
-			System.out.println(request.getURI());
-			System.out.println(response.getStatusLine());
+//			HttpResponse response = client.execute(request);
+//			// log debug information
+//			System.out.println(request.getURI());
+//			System.out.println(response.getStatusLine());
 			
 	}
 

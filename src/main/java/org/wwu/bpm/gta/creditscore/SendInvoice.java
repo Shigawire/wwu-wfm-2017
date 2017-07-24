@@ -29,10 +29,10 @@ public class SendInvoice extends ServletProcessApplication implements JavaDelega
 
 		// execute request
 		HttpUriRequest request = requestBuilder.build();
-		HttpResponse response = client.execute(request);
-		// log debug information
-		System.out.println(request.getURI());
-		System.out.println(response.getStatusLine());
+//		HttpResponse response = client.execute(request);
+//		// log debug information
+//		System.out.println(request.getURI());
+//		System.out.println(response.getStatusLine());
 		
 	}
 }

@@ -164,10 +164,6 @@
         <bpmn:targetRef>Property_0rbapso</bpmn:targetRef>
       </bpmn:dataInputAssociation>
     </bpmn:serviceTask>
-    <bpmn:dataObjectReference id="Investment_Information" name="Investment Information" dataObjectRef="DataObject_17ep2ra" />
-    <bpmn:dataObject id="DataObject_17ep2ra" />
-    <bpmn:dataObjectReference id="Debt_Information" name="Debt Information" dataObjectRef="DataObject_0yeyjjd" />
-    <bpmn:dataObject id="DataObject_0yeyjjd" />
     <bpmn:serviceTask id="Check_Payroll_Information" name="Check Payroll Information" implementation="##WebService" camunda:class="org.wwu.bpm.gta.creditscore.CheckPayrollInformation">
       <bpmn:incoming>SequenceFlow_0kmaomj</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0p7qpi4</bpmn:outgoing>
@@ -247,7 +243,7 @@
     <bpmn:sequenceFlow id="SequenceFlow_09ovva2" name="No" sourceRef="ExclusiveGateway_0s4ahik" targetRef="Create_a_New_Account">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${applicantExists.equals("no")}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Create_a_New_Account" name="Create a New Account" camunda:formKey="embedded:app:forms/CreatANewAccount.html" camunda:assignee="demp">
+    <bpmn:userTask id="Create_a_New_Account" name="Create a New Account" camunda:formKey="embedded:app:forms/CreatANewAccount.html" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="ApplicantFirstName" type="string" />
@@ -260,6 +256,10 @@
       <bpmn:outgoing>SequenceFlow_0iz0lrf</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0iz0lrf" sourceRef="Create_a_New_Account" targetRef="ExclusiveGateway_0hlduoj" />
+    <bpmn:dataObjectReference id="Debt_Information" name="Debt Information" dataObjectRef="DataObject_0yeyjjd" />
+    <bpmn:dataObject id="DataObject_0yeyjjd" />
+    <bpmn:dataObjectReference id="Investment_Information" name="Investment Information" dataObjectRef="DataObject_17ep2ra" />
+    <bpmn:dataObject id="DataObject_17ep2ra" />
   </bpmn:process>
   <bpmn:process id="Process_174lh9l" isExecutable="false" />
   <bpmn:message id="Message_1twm4h5" name="Message_CreditCheckRequest" />
@@ -555,15 +555,15 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjectReference_11r8pua_di" bpmnElement="Debt_Information">
-        <dc:Bounds x="583.45175" y="457.7325" width="36" height="50" />
+        <dc:Bounds x="586" y="435" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="561" y="511" width="82" height="12" />
+          <dc:Bounds x="564" y="488" width="82" height="12" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjectReference_1who453_di" bpmnElement="Investment_Information">
-        <dc:Bounds x="402" y="487.14925" width="36" height="50" />
+        <dc:Bounds x="436" y="457" width="36" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="392" y="540" width="56" height="24" />
+          <dc:Bounds x="426" y="510" width="56" height="24" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="DataObjectReference_0bor3g7_di" bpmnElement="DataObjectReference_0bor3g7">
@@ -587,12 +587,12 @@
         <di:waypoint xsi:type="dc:Point" x="556.6457489878542" y="301.2280701754386" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataInputAssociation_0x0la5e_di" bpmnElement="DataInputAssociation_0x0la5e">
-        <di:waypoint xsi:type="dc:Point" x="584" y="458" />
-        <di:waypoint xsi:type="dc:Point" x="554.1396761133603" y="412.362685560054" />
+        <di:waypoint xsi:type="dc:Point" x="586" y="442" />
+        <di:waypoint xsi:type="dc:Point" x="553" y="406" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="DataInputAssociation_02otl8l_di" bpmnElement="DataInputAssociation_02otl8l">
-        <di:waypoint xsi:type="dc:Point" x="438" y="526" />
-        <di:waypoint xsi:type="dc:Point" x="496.1734143049933" y="570.4419703103913" />
+        <di:waypoint xsi:type="dc:Point" x="467" y="507" />
+        <di:waypoint xsi:type="dc:Point" x="501" y="573" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="ServiceTask_0mb1lzv_di" bpmnElement="Infer_Recommendation">
         <dc:Bounds x="1123" y="354" width="100" height="80" />

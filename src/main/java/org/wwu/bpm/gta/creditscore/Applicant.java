@@ -87,7 +87,6 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			this.lastName = rs.getString("lastName");
 			this.creditRating = rs.getDouble("creditRating");
 			this.lastRating = rs.getDate("lastRating");
-			this.creditRecommendation = rs.getInt("creditRecommendation");
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -152,7 +151,6 @@ public class Applicant extends ServletProcessApplication implements JavaDelegate
 			this.lastName = lastName;
 			this.creditRating = null;
 			this.lastRating = null;
-			this.creditRecommendation = null;
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
